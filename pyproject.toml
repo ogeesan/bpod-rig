@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "bpod-rig"
-dynamic = ["version"]
+version = "0.0.1"
 description = "Python software suite for Bpod, built around int-brain-lab's bpod-core"
 readme = "README.md"
 license = "MIT"
@@ -35,8 +35,6 @@ include-package-data = true
 find = {where = [""], include = ["*", "examples"]}
 # We need to explicitly include examples as it is a reserved name
 
-[tool.setuptools.dynamic]
-version = {attr="bpod_rig.__version__"}
 
 [tool.ruff]
 # Exclude a variety of commonly ignored directories.
