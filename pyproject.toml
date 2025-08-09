@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "bpod-rig"
-version = "0.0.1"
+version = "0.0.2"
 description = "Python software suite for Bpod, built around int-brain-lab's bpod-core"
 readme = "README.md"
 license = "MIT"
