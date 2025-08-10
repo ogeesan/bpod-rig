@@ -50,15 +50,14 @@ def create_default_directories(default_path_override: Path = None) -> Path:
     return bpod_folder_path
 
 
-def copy_default_files(bpod_dir: Path, only_if_empty: bool = True):
+def copy_default_files(bpod_dir: Path, override: bool = False):
     """
     Function to copy default settings and calibration .json files from the included
     examples package
     Parameters
     ----------
     bpod_dir (pathlib.Path): Path to the Bpod directory
-    only_if_empty (bool) (Optional): Only copy the files if the destination
-     directory is empty
+    override (bool) (Optional): Override any existing files
 
     Returns
     -------
@@ -75,9 +74,7 @@ def copy_default_files(bpod_dir: Path, only_if_empty: bool = True):
     bpod_calibration_dir_contents = list(bpod_calibration_dir.iterdir())
     bpod_settings_dir_contents = list(bpod_settings_dir.iterdir())
 
-    if (only_if_empty and len(bpod_calibration_dir_contents) == 0) or not only_if_empty:
-        # If only_if_empty is true, the calibration dir must be empty; if only_if_empty
-        # is false, we'll copy no matter what
+    if len(bpod_calibration_dir_contents) == 0 or override:
         for cal_file in default_calibration_files:
             try:
                 logger.debug("Copying %s to %s...", cal_file, bpod_calibration_dir)
@@ -85,7 +82,7 @@ def copy_default_files(bpod_dir: Path, only_if_empty: bool = True):
             except Exception as e:  # NOQA PERF203
                 logger.error("Error copying %s! Original Exception: %s", cal_file, e)
 
-    if (only_if_empty and len(bpod_settings_dir_contents) == 0) or not only_if_empty:
+    if len(bpod_settings_dir_contents) == 0 or override:
         for setting_file in default_settings_files:
             try:
                 logger.debug("Copying %s to %s...", setting_file, bpod_settings_dir)
