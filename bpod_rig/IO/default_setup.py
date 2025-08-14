@@ -12,7 +12,7 @@ DEFAULT_DIR_NAME = "Bpod"
 logger = logging.getLogger(__name__)
 
 
-def create_default_directories(usb_port: str, default_path_override: Path = None) -> Path:
+def create_default_directories(machine_id: str, default_path_override: Path = None) -> Path:
     """
     Create the default Bpod folder structure for a given machine.
 
@@ -21,7 +21,7 @@ def create_default_directories(usb_port: str, default_path_override: Path = None
 
         Bpod/
             Config/
-                Machine-<usb_port>/
+                Machine-<machine_id>/
                     Calibration/
                     Settings/
             Protocols/
@@ -33,8 +33,8 @@ def create_default_directories(usb_port: str, default_path_override: Path = None
 
     Parameters
     ----------
-    usb_port : str
-        Name of the USB serial port for the target Bpod machine (e.g., "COM3", "EMU").
+    machine_id : str
+        Name of the serial# or USB port for the target Bpod machine (e.g., "COM3", "EMU").
         Used to create a machine-specific directory inside Config.
     default_path_override : pathlib.Path, optional
         A path to override the default Bpod folder location. If not provided,
@@ -74,7 +74,7 @@ def create_default_directories(usb_port: str, default_path_override: Path = None
             new_path.mkdir(parents=True, exist_ok=True)
 
     # Create machine-specific config folder
-    machine_config_dir = bpod_folder_path.joinpath("Config", f"Machine-{usb_port}")
+    machine_config_dir = bpod_folder_path.joinpath("Config", f"Machine-{machine_id}")
     machine_config_dir.mkdir(parents=True, exist_ok=True)
 
     calibration_dir = machine_config_dir.joinpath("Calibration")
@@ -89,15 +89,15 @@ def create_default_directories(usb_port: str, default_path_override: Path = None
     return bpod_folder_path
 
 
-def copy_default_files(bpod_folder_path: Path, usb_port: str, override: bool = False):
+def copy_default_files(bpod_folder_path: Path, machine_id: str, override: bool = False):
     """
     Function to copy default settings and calibration .json files from the included
-    examples package into the specified usb_port machine directory.
+    examples package into the specified machine_id machine directory.
 
     Parameters
     ----------
     bpod_folder_path (pathlib.Path): Path to the Bpod directory
-    usb_port (str): Name of the USB serial port (e.g., "COM3")
+    machine_id (str): Name of the serial# or USB serial port (e.g., "COM3")
     override (bool) (Optional): Overwrite any existing files
 
     Returns
@@ -106,8 +106,8 @@ def copy_default_files(bpod_folder_path: Path, usb_port: str, override: bool = F
     """
 
     # Locate target Calibration and Settings directories for this machine
-    calibration_dir = bpod_folder_path.joinpath("Config", f"Machine-{usb_port}", "Calibration")
-    settings_dir = bpod_folder_path.joinpath("Config", f"Machine-{usb_port}", "Settings")
+    calibration_dir = bpod_folder_path.joinpath("Config", f"Machine-{machine_id}", "Calibration")
+    settings_dir = bpod_folder_path.joinpath("Config", f"Machine-{machine_id}", "Settings")
 
     calibration_example_dir = Path(calibration.__path__[0])
     settings_example_dir = Path(settings.__path__[0])
