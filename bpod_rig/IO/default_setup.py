@@ -14,8 +14,36 @@ logger = logging.getLogger(__name__)
 
 def create_default_directories(usb_port: str, default_path_override: Path = None) -> Path:
     """
-    Function creates the default Bpod folder structure in the user's Documents directory
-    or in a user-supplied path. Supports multiple machines via usb_port argument.
+    Create the default Bpod folder structure for a given machine.
+
+    By default, the Bpod directory will be created inside the user's Documents
+    folder with the following top-level subdirectories:
+
+        Bpod/
+            Config/
+                Machine-<usb_port>/
+                    Calibration/
+                    Settings/
+            Protocols/
+            Data/
+
+    This function only creates the directory structure — it does NOT populate
+    default calibration or settings files. To copy default files, call
+    `copy_default_files()` separately.
+
+    Parameters
+    ----------
+    usb_port : str
+        Name of the USB serial port for the target Bpod machine (e.g., "COM3", "EMU").
+        Used to create a machine-specific directory inside Config.
+    default_path_override : pathlib.Path, optional
+        A path to override the default Bpod folder location. If not provided,
+        the default location is `~/Documents/Bpod`.
+
+    Returns
+    -------
+    pathlib.Path
+        The path to the created Bpod directory.
     """
 
     # Default root is the Documents folder
