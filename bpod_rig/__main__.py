@@ -10,9 +10,11 @@ logger = logging.getLogger(__name__)
 
 def main():
     logger.info("Initializing bpod-rig!")
-    bpod_directory = default_setup.create_default_directories()
-    default_setup.copy_default_files(bpod_directory)
-    logger.info("Bpod directory initialized to %s", bpod_directory)
+    # Setup folders. "EMU" is the USB serial port argument for the emulator.
+    # create_default_directories() is called later to add folders for each FSM on the PC
+    bpod_directory = default_setup.create_default_directories("EMU")
+    # Populate this machine's folders with the default config and calibration files.
+    default_setup.copy_default_files(bpod_directory, "EMU")
 
 
 if __name__ == "__main__":
