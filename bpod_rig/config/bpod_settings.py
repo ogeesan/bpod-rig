@@ -4,9 +4,8 @@ from typing import Annotated, Optional, Union
 from pydantic import BaseModel, ConfigDict, DirectoryPath, PastDate
 from pydantic.types import StringConstraints, conbytes
 
-class SettingsBase(BaseModel):
-    save_date: PastDate
-    author: str  # Username of settings creator
+from bpod_rig.config.base import SettingsBase
+
 
 class BpodSettings(BaseModel, SettingsBase):
     nickname: Annotated[
