@@ -4,7 +4,7 @@ from typing import Annotated, Optional, Union
 from pydantic import BaseModel, ConfigDict, DirectoryPath, PastDate
 from pydantic.types import StringConstraints, conbytes
 
-from bpod_rig.config.base import SettingsBase
+from config.models.base import SettingsBase
 
 
 class BpodSettings(BaseModel, SettingsBase):
