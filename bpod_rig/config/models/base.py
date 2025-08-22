@@ -6,6 +6,6 @@ class SettingsBase(BaseModel):
     save_date: PastDate
     author: str  # Username of settings creator
 
-class ModuleBase(BaseModel, SettingsBase):
+class ModuleBase(SettingsBase):
     name: str
     USB_port: str
