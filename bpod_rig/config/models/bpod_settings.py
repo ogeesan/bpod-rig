@@ -7,7 +7,7 @@ from pydantic.types import StringConstraints, conbytes
 from config.models.base import SettingsBase
 
 
-class BpodSettings(BaseModel, SettingsBase):
+class BpodSettings(SettingsBase):
     nickname: Annotated[
         str,
         StringConstraints(
@@ -26,16 +26,16 @@ class BpodSettings(BaseModel, SettingsBase):
     behavior_ports: conbytes(max_length=1) # Can this be more than 8 bits?
 
 
-class SystemPaths(BaseModel, SettingsBase):
     protocol_dir: DirectoryPath
     data_dir: DirectoryPath
     calibration_dir: DirectoryPath
     config_dir: DirectoryPath  # This might be redundant
+class SystemPaths(SettingsBase):
 
 
-class SystemSettings(BaseModel, SettingsBase):
     current_version: str
     last_update_check: Union[None, PastDate]
+class SystemSettings(SettingsBase):
 
     phone_home_id: Optional[str]
     phone_home_opt_in: bool = False
