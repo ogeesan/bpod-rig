@@ -26,7 +26,7 @@ class SettingsBase(BaseModel):
     author: Annotated[
         str,
         Field(
-            ...,
+            "BpodUser",
             min_length=1,
             max_length=128,
             title="Username of settings creator",
