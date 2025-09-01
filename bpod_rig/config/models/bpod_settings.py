@@ -63,13 +63,57 @@ class SystemPaths(SettingsBase):
 
 
 class SystemSettings(SettingsBase):
-    current_version: str = '0.0.0'
-    last_update_check: PastDate = None
+    current_version: Annotated[
+        str,
+        Field(
+            '0.0.0',
+            title="Current bpod-rig version",
+            description="Currently installed version of the bpod-rig repository"
+        )
+    ]
 
-    phone_home_id: Optional[UUID4] = None
-    phone_home_opt_in: bool = False
+    last_update_check: Annotated[
+        Optional[PastDate],
+        Field(
+            title="Last update check date and time",
+            description="Last date and time that system checked for any updates"
+                        " compared to the current version"
+        )
+    ]
 
-    debug: bool = False
+    phone_home_id: Annotated[
+        Optional[UUID4],
+        Field(
+            title="System's Unique Phone-Home ID",
+            description="UUID4 ID of the current system"
+                        " for the Bpod phone-home telemetry."
+        )
+    ]
 
-    paths: SystemPaths = SystemPaths()
+    phone_home_opt_in: Annotated[
+        bool,
+        Field(
+            False,
+            title="Phone-Home Opt-In",
+            description="Whether or not the user has opted"
+                        " in to the phone-home telemetry."
+        )
+    ]
+
+    debug: Annotated[
+        bool,
+        Field(
+            False,
+            title="Debug Enabled",
+            description="Set to True to enable debug information output."
+        )
+    ]
+
+    paths: Annotated[
+        SystemPaths,
+        Field(
+            title="System Paths Model",
+            description="Model containing validated bpod system paths"
+        )
+    ]
     model_config = ConfigDict()
