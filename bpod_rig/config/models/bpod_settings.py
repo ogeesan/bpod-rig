@@ -57,13 +57,16 @@ class SystemPaths(SettingsBase):
         ),
     ]
     log_dir: Annotated[
-        DirectoryPath,
+        Optional[DirectoryPath],
         Field(
             ".",
             title="Bpod Log Directory",
             description="Local directory where Bpod logs are stored.",
         ),
     ]
+
+    model_config = ConfigDict()
+
 
 
 class SystemSettings(SettingsBase):
