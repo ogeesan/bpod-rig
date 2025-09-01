@@ -23,7 +23,7 @@ class SystemPaths(SettingsBase):
     protocol_dir: Annotated[
         DirectoryPath,
         Field(
-            ".",
+            ...,
             title="Bpod Protocol Directory",
             description="Local directory where Bpod protocols are stored."
             " The Protocol explorer will list all valid protocols found"
@@ -34,7 +34,7 @@ class SystemPaths(SettingsBase):
     data_dir: Annotated[
         DirectoryPath,
         Field(
-            ".",
+            ...,
             title="Bpod Data Directory",
             description="Local directory where data from protocol runs are stored.",
         ),
@@ -42,7 +42,7 @@ class SystemPaths(SettingsBase):
     calibration_dir: Annotated[
         DirectoryPath,
         Field(
-            ".",
+            ...,
             title="Bpod Calibration File Directory",
             description="Local directory where Bpod water"
             " valve calibrations are stored.",
@@ -51,7 +51,7 @@ class SystemPaths(SettingsBase):
     config_dir: Annotated[
         DirectoryPath,
         Field(
-            ".",
+            ...,
             title="Bpod Configuration Directory",
             description="Local directory where Bpod configuration files are stored.",
         ),
@@ -59,7 +59,7 @@ class SystemPaths(SettingsBase):
     log_dir: Annotated[
         Optional[DirectoryPath],
         Field(
-            ".",
+            ...,
             title="Bpod Log Directory",
             description="Local directory where Bpod logs are stored.",
         ),
