@@ -59,7 +59,7 @@ class SystemPaths(SettingsBase):
     log_dir: Annotated[
         Optional[DirectoryPath],
         Field(
-            ...,
+            None,
             title="Bpod Log Directory",
             description="Local directory where Bpod logs are stored.",
         ),
@@ -82,6 +82,7 @@ class SystemSettings(SettingsBase):
     last_update_check: Annotated[
         Optional[PastDate],
         Field(
+            None,
             title="Last update check date and time",
             description="Last date and time that system checked for any updates"
             " compared to the current version",
@@ -91,6 +92,7 @@ class SystemSettings(SettingsBase):
     phone_home_id: Annotated[
         Optional[UUID4],
         Field(
+            None,
             title="System's Unique Phone-Home ID",
             description="UUID4 ID of the current system"
             " for the Bpod phone-home telemetry.",
