@@ -68,7 +68,6 @@ class SystemPaths(SettingsBase):
     model_config = ConfigDict()
 
 
-
 class SystemSettings(SettingsBase):
     current_version: Annotated[
         str,
