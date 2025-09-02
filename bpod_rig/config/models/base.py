@@ -18,6 +18,7 @@ class SettingsBase(BaseModel):
     save_date: Annotated[
         Optional[Union[datetime.datetime, PastDate]],  # Optional, but can be either type
         Field(
+            None,
             title="Settings Save Date and Time",
             description="Date and time that this settings model was saved or updated.",
         ),
