@@ -1,5 +1,3 @@
-
-import json
 import logging
 from pathlib import Path
 from typing import Union
@@ -56,8 +54,9 @@ def save_config_to_disk(
 
     try:
         with open(config_save_path, "w") as json_stream:
-                model_as_json = system_config.model_dump_json()
-                json.dump(model_as_json, json_stream)
+                logger.info("Saving configuration to %s", str(config_save_path))
+                model_as_json = system_config.model_dump_json(indent=4)
+                json_stream.write(model_as_json)
     except (IOError, OSError) as e:
         logger.error("Error opening or writing config file to disk!", e)
 
