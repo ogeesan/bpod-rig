@@ -39,15 +39,7 @@ class SystemPaths(SettingsBase):
             description="Local directory where data from protocol runs are stored.",
         ),
     ]
-    calibration_dir: Annotated[
-        DirectoryPath,
-        Field(
-            ...,
-            title="Bpod Calibration File Directory",
-            description="Local directory where Bpod water"
-            " valve calibrations are stored.",
-        ),
-    ]
+
     config_dir: Annotated[
         DirectoryPath,
         Field(

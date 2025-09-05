@@ -9,7 +9,6 @@ def init_system_configuration(bpod_dir: Path) -> SystemSettings:
         creation_date=datetime.date.today(),
         base_dir=bpod_dir,
         data_dir=bpod_dir.joinpath("Data"),
-        calibration_dir=bpod_dir.joinpath("Calibrations"),
         config_dir=bpod_dir.joinpath("Settings"),
         protocol_dir=bpod_dir.joinpath("Protocols"),
         # log_dir=bpod_dir.joinpath("Logs")
