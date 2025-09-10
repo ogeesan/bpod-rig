@@ -2,7 +2,7 @@ import logging
 from pathlib import Path
 from typing import Union
 
-from bpod_rig.config.models.bpod_settings import SystemSettings
+from bpod_rig.config.models.system_settings import SystemSettings
 
 DEFAULT_CONFIG_FILE_NAME = "config.json"
 
