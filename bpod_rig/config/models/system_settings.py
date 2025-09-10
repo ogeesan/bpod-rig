@@ -2,8 +2,8 @@
 
 from typing import Annotated, Optional
 from pydantic import ConfigDict, DirectoryPath, PastDate, UUID4, Field
-from config.models.base import SettingsBase
-
+from bpod_rig.config.models.base import SettingsBase
+from bpod_rig.config.models.bpod_settings import BpodPaths
 
 class SystemPaths(SettingsBase):
     base_dir: Annotated[
@@ -117,4 +117,16 @@ class SystemSettings(SettingsBase):
             description="Model containing validated bpod system paths",
         ),
     ]
+
+    bpod_dirs: Annotated[
+        Optional[list[BpodPaths]],
+        Field(
+            None,
+            title="All Bpod Paths",
+            description="List containing BpodPaths objects that contain"
+                        " the folder structure for each unique Bpod"
+        )
+
+    ]
+
     model_config = ConfigDict()
