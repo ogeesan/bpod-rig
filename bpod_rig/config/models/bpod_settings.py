@@ -1,7 +1,8 @@
 """Module implementing the base BpodSettings object"""
 
 from typing import Annotated, Optional, Any
-from pydantic import ConfigDict, DirectoryPath, PastDate, UUID4, Field, field_validator
+from pydantic import ConfigDict, DirectoryPath, PastDate, UUID4, Field, field_validator, \
+    FilePath
 from config.models.base import SettingsBase
 
 
@@ -64,6 +65,16 @@ class BpodPaths(SettingsBase):
             title="Bpod Configuration Directory",
             description="Local directory where Bpod configuration files are stored.",
         ),
+    ]
+
+    calibration_files: Annotated[
+        Optional[dict[str, FilePath]],
+        Field(
+            {},
+            title="Bpod calibration files",
+            description="Dictionary of calibration files found in the calibration "
+                        "directory for this Bpod."
+        )
     ]
 
 
