@@ -1,8 +1,7 @@
 """Module implementing the base BpodSettings object"""
 
-from typing import Annotated, Optional, Any
-from pydantic import ConfigDict, DirectoryPath, PastDate, UUID4, Field, field_validator, \
-    FilePath
+from typing import Annotated, Optional
+from pydantic import ConfigDict, DirectoryPath, PastDate, UUID4, Field, FilePath
 from config.models.base import SettingsBase
 
 
