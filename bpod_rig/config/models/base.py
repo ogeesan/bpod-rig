@@ -1,8 +1,10 @@
 """Base classes for configuration classes"""
 
 import datetime
-from typing import Annotated, Union, Optional
-from pydantic import BaseModel, Field, PastDate
+from typing import Annotated, Union, Optional, Any
+
+import pydantic.types
+from pydantic import BaseModel, Field, PastDate, validator, field_validator
 
 
 class SettingsBase(BaseModel):
@@ -14,7 +16,7 @@ class SettingsBase(BaseModel):
         ),
     ] = datetime.date.today()
 
-    save_date: Annotated[
+    save_datetime: Annotated[
         Optional[
             Union[datetime.datetime, PastDate]
         ],  # Optional, but can be either type
@@ -34,6 +36,24 @@ class SettingsBase(BaseModel):
             description="Username of the creator of this settings model.",
         ),
     ] = "BpodUser"
+
+    # noinspection PyNestedDecorators
+    @field_validator("creation_date", mode="after")
+    @classmethod
+    def validate_nonfuture(cls, value: datetime.date) -> datetime.date:
+        if value > datetime.date.today():
+            raise ValueError(f'Provided creation_date {value} cannot be in the future!')
+        return value
+
+    # noinspection PyNestedDecorators
+    @field_validator("save_datetime", mode="after")
+    @classmethod
+    def validate_nonfuture_datetime(cls, value: datetime.datetime) -> datetime.datetime:
+        if value > datetime.datetime.now():
+            raise ValueError(f'Provided save_datetime {value} cannot be in the future!')
+        return value
+
+
 
 
 class ModuleBase(SettingsBase):
