@@ -57,7 +57,7 @@ class SystemPaths(SettingsBase):
                 DEFAULT_PROTOCOL_DIR_NAME
             )
         ),
-    ]
+    ] = None
 
     data_dir: Annotated[
         DirectoryPath,
@@ -69,7 +69,7 @@ class SystemPaths(SettingsBase):
                 DEFAULT_DATA_DIR_NAME
             ),
         ),
-    ]
+    ] = None
 
     base_config_dir: Annotated[
         DirectoryPath,
@@ -81,7 +81,7 @@ class SystemPaths(SettingsBase):
                 DEFAULT_CONFIG_DIR_NAME
             ),
         ),
-    ]
+    ] = None
 
     log_dir: Annotated[
         Optional[DirectoryPath],
@@ -95,7 +95,7 @@ class SystemPaths(SettingsBase):
             # ),
             # TODO: Add log folder to initial configuration; until then this is optional
         ),
-    ]
+    ] = None
 
     model_config = ConfigDict()
 
@@ -104,41 +104,37 @@ class SystemSettings(SettingsBase):
     current_version: Annotated[
         str,
         Field(
-            "0.0.0",
             title="Current bpod-rig version",
             description="Currently installed version of the bpod-rig repository",
         ),
-    ]
+    ] = "0.0.0"
 
     last_update_check: Annotated[
         Optional[PastDate],
         Field(
-            None,
             title="Last update check date and time",
             description="Last date and time that system checked for any updates"
             " compared to the current version",
         ),
-    ]
+    ] = None
 
     phone_home_id: Annotated[
         Optional[UUID4],
         Field(
-            None,
             title="System's Unique Phone-Home ID",
             description="UUID4 ID of the current system"
             " for the Bpod phone-home telemetry.",
         ),
-    ]
+    ] = None
 
     phone_home_opt_in: Annotated[
         bool,
         Field(
-            False,
             title="Phone-Home Opt-In",
             description="Whether or not the user has opted"
             " in to the phone-home telemetry.",
         ),
-    ]
+    ] = False
 
     debug: Annotated[
         bool,
@@ -147,7 +143,7 @@ class SystemSettings(SettingsBase):
             title="Debug Enabled",
             description="Set to True to enable debug information output.",
         ),
-    ]
+    ] = False
 
     paths: Annotated[
         SystemPaths,
@@ -160,11 +156,10 @@ class SystemSettings(SettingsBase):
     bpod_dirs: Annotated[
         Optional[list[BpodPaths]],
         Field(
-            None,
             title="All Bpod Paths",
             description="List containing BpodPaths objects that contain"
             " the folder structure for each unique Bpod",
         ),
-    ]
+    ] = None
 
     model_config = ConfigDict()

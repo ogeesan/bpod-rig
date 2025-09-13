@@ -9,11 +9,10 @@ class SettingsBase(BaseModel):
     creation_date: Annotated[
         Union[datetime.date, PastDate],
         Field(
-            datetime.date.today(),
             title="Settings Creation Date",
             description="Date that this settings model was instantiated",
         ),
-    ]
+    ] = datetime.date.today()
 
     save_date: Annotated[
         Optional[
@@ -24,19 +23,17 @@ class SettingsBase(BaseModel):
             title="Settings Save Date and Time",
             description="Date and time that this settings model was saved or updated.",
         ),
-    ]
+    ] = None
 
-    author: Annotated[
+    username: Annotated[
         str,
         Field(
-            "BpodUser",
             min_length=1,
             max_length=128,
             title="Username of settings creator",
             description="Username of the creator of this settings model.",
-            alias="username",
         ),
-    ]
+    ] = "BpodUser"
 
 
 class ModuleBase(SettingsBase):
