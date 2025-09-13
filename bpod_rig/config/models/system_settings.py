@@ -5,6 +5,31 @@ from pydantic import ConfigDict, DirectoryPath, PastDate, UUID4, Field
 from bpod_rig.config.models.base import SettingsBase
 from bpod_rig.config.models.bpod_settings import BpodPaths
 
+DEFAULT_PROTOCOL_DIR_NAME = "Protocols"
+DEFAULT_DATA_DIR_NAME = "Data"
+DEFAULT_CONFIG_DIR_NAME = "Config"
+DEFAULT_LOG_DIR_NAME = "Logs"
+
+def system_path_factory(data: dict, addition: str):
+    """
+    Function to dynamically create SytemPath subpaths at validation time.
+    Function creates a path in the below form:
+
+    {base_dir}/[addition]
+
+    Path components in {} are retrieved from the dictionary of pre-validated data.
+
+    Parameters
+    ----------
+    data (dict): Dictionary containing all previously validated fields
+    addition (str): Addition to join to the end of the path
+
+    Returns
+    -------
+    (pathlib.Path): combined path in above form
+    """
+    return data["base_dir"].joinpath(addition)
+
 class SystemPaths(SettingsBase):
     base_dir: Annotated[
         DirectoryPath,
@@ -23,29 +48,38 @@ class SystemPaths(SettingsBase):
     protocol_dir: Annotated[
         DirectoryPath,
         Field(
-            ...,
             title="Bpod Protocol Directory",
             description="Local directory where Bpod protocols are stored."
             " The Protocol explorer will list all valid protocols found"
             " in this directory.",
+            default_factory=lambda data: system_path_factory(
+                data,
+                DEFAULT_PROTOCOL_DIR_NAME
+            )
         ),
     ]
 
     data_dir: Annotated[
         DirectoryPath,
         Field(
-            ...,
             title="Bpod Data Directory",
             description="Local directory where data from protocol runs are stored.",
+            default_factory=lambda data: system_path_factory(
+                data,
+                DEFAULT_DATA_DIR_NAME
+            ),
         ),
     ]
 
     base_config_dir: Annotated[
         DirectoryPath,
         Field(
-            ...,
             title="Bpod Configuration Directory",
             description="Local directory where Bpod configuration files are stored.",
+            default_factory=lambda data: system_path_factory(
+                data,
+                DEFAULT_CONFIG_DIR_NAME
+            ),
         ),
     ]
 
@@ -55,6 +89,11 @@ class SystemPaths(SettingsBase):
             None,
             title="Bpod Log Directory",
             description="Local directory where Bpod logs are stored.",
+            # default_factory=lambda data: system_path_factory(
+            #     data,
+            #     DEFAULT_LOG_DIR_NAME
+            # ),
+            # TODO: Add log folder to initial configuration; until then this is optional
         ),
     ]
 
@@ -124,9 +163,8 @@ class SystemSettings(SettingsBase):
             None,
             title="All Bpod Paths",
             description="List containing BpodPaths objects that contain"
-                        " the folder structure for each unique Bpod"
-        )
-
+            " the folder structure for each unique Bpod",
+        ),
     ]
 
     model_config = ConfigDict()
