@@ -49,7 +49,7 @@ class SystemPaths(SettingsBase):
     ]
 
     protocol_dir: Annotated[
-        DirectoryPath,
+        Optional[DirectoryPath],
         Field(
             title="Bpod Protocol Directory",
             description="Local directory where Bpod protocols are stored."
@@ -64,7 +64,7 @@ class SystemPaths(SettingsBase):
     ] = None
 
     data_dir: Annotated[
-        DirectoryPath,
+        Optional[DirectoryPath],
         Field(
             title="Bpod Data Directory",
             description="Local directory where data from protocol runs are stored.",
@@ -76,7 +76,7 @@ class SystemPaths(SettingsBase):
     ] = None
 
     base_config_dir: Annotated[
-        DirectoryPath,
+        Optional[DirectoryPath],
         Field(
             title="Bpod Configuration Directory",
             description="Local directory where Bpod configuration files are stored.",
@@ -90,7 +90,6 @@ class SystemPaths(SettingsBase):
     log_dir: Annotated[
         Optional[DirectoryPath],
         Field(
-            None,
             title="Bpod Log Directory",
             description="Local directory where Bpod logs are stored.",
             # default_factory=lambda data: system_path_factory(
