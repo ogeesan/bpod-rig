@@ -28,6 +28,9 @@ def system_path_factory(data: dict, addition: str):
     -------
     (pathlib.Path): combined path in above form
     """
+    if "base_dir" not in data:
+        return None
+
     return data["base_dir"].joinpath(addition)
 
 class SystemPaths(SettingsBase):
