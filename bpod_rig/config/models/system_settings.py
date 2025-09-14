@@ -58,7 +58,8 @@ class SystemPaths(SettingsBase):
             default_factory=lambda data: system_path_factory(
                 data,
                 DEFAULT_PROTOCOL_DIR_NAME
-            )
+            ),
+            validate_default=True
         ),
     ] = None
 
@@ -68,9 +69,9 @@ class SystemPaths(SettingsBase):
             title="Bpod Data Directory",
             description="Local directory where data from protocol runs are stored.",
             default_factory=lambda data: system_path_factory(
-                data,
-                DEFAULT_DATA_DIR_NAME
+                data, DEFAULT_DATA_DIR_NAME
             ),
+            validate_default=True,
         ),
     ] = None
 
@@ -80,9 +81,9 @@ class SystemPaths(SettingsBase):
             title="Bpod Configuration Directory",
             description="Local directory where Bpod configuration files are stored.",
             default_factory=lambda data: system_path_factory(
-                data,
-                DEFAULT_CONFIG_DIR_NAME
+                data, DEFAULT_CONFIG_DIR_NAME
             ),
+            validate_default=True,
         ),
     ] = None
 
@@ -96,6 +97,7 @@ class SystemPaths(SettingsBase):
             #     data,
             #     DEFAULT_LOG_DIR_NAME
             # ),
+            # validate_default=True,
             # TODO: Add log folder to initial configuration; until then this is optional
         ),
     ] = None
