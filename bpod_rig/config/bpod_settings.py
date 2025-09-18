@@ -3,7 +3,7 @@
 
 from typing import Annotated, Optional
 from pydantic import DirectoryPath, Field, FilePath
-from bpod_rig.config.models.base import SettingsBase
+from config.base import SettingsBase
 
 
 def bpod_path_factory(data: dict, addition: str):

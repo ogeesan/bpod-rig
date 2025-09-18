@@ -6,7 +6,7 @@ import unittest
 
 from pydantic import ValidationError
 
-from bpod_rig.config.models.base import SettingsBase
+from config.base import SettingsBase
 from bpod_rig.config.bpod_system import SystemPaths
 
 class TestBaseModel(unittest.TestCase):
