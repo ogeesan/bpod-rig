@@ -2,8 +2,8 @@
 
 from typing import Annotated, Optional
 from pydantic import ConfigDict, DirectoryPath, PastDate, UUID4, Field
-from bpod_rig.config.models.base import SettingsBase
-from bpod_rig.config.models.bpod_settings import BpodPaths
+from config.base import SettingsBase
+from config.bpod_settings import BpodPaths
 
 DEFAULT_PROTOCOL_DIR_NAME = "Protocols"
 DEFAULT_DATA_DIR_NAME = "Data"

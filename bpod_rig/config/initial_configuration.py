@@ -1,7 +1,7 @@
 import datetime
 from pathlib import Path
 
-from bpod_rig.config.models.system_settings import SystemPaths, SystemSettings
+from config.system_settings import SystemPaths, SystemSettings
 
 
 def init_system_configuration(bpod_dir: Path) -> SystemSettings:
