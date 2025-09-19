@@ -1,7 +1,7 @@
 """Module implementing the Pydantic models for any system settings"""
 
 from typing import Annotated, Optional
-from pydantic import ConfigDict, DirectoryPath, PastDate, UUID4, Field
+from pydantic import DirectoryPath, PastDate, UUID4, Field
 from bpod_rig.config.base import ModelWithMetadata
 from bpod_rig.config.bpod_settings import BpodPaths
 
@@ -164,5 +164,3 @@ class SystemSettings(ModelWithMetadata):
             " the folder structure for each unique Bpod",
         ),
     ] = None
-
-    model_config = ConfigDict()
