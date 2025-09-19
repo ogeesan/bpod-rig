@@ -9,15 +9,15 @@ description = "Python software suite for Bpod, built around int-brain-lab's bpod
 readme = "README.md"
 license = "MIT"
 authors = [
-	{name = "Joshua Sanders", email = "josh@sanworks.io"},
-	{name = "Austin Pauley", email = "pauley@psy.fsu.edu"},
-	{name = "Florian Rau", email = "bimac@users.noreply.github.com" },
-	{name = "Steven Smith", email = "steven@stevenlsmith.com"}
+    { name = "Joshua Sanders", email = "josh@sanworks.io" },
+    { name = "Austin Pauley", email = "pauley@psy.fsu.edu" },
+    { name = "Florian Rau", email = "bimac@users.noreply.github.com" },
+    { name = "Steven Smith", email = "steven@stevenlsmith.com" }
 ]
 requires-python = ">=3.10"
 dependencies = [
-	#"bpod-gui"
     "bpod-core",
+    #"bpod-gui"
 ]
 
 [project.urls]
@@ -29,7 +29,7 @@ Repository = "https://github.com/sanworks/bpod-rig.git"
 
 
 [tool.setuptools.packages]
-find = {where = [""], include = ["*", "examples"]}
+find = { where = [""], include = ["*", "examples"] }
 # We want to include the examples folder in the wheel incase its needed
 # We need to explicitly include examples as it is a reserved name
 
@@ -100,17 +100,17 @@ select = [
     "UP007", # use pipes for type union instead of Union
 ]
 ignore = [
-	"COM812",  # Missing trailing comma
-	"D100",    # Missing docstring in public module
-  	"D101",    # Missing docstring in public class
-  	"D102",    # Missing docstring in puclic method
-	"D103",    # Missing docstring in public function
-	"D104",    # Missing docstring in public package
-	"D105",    # Missing docstring in magic method
-	"D401",    # First line of docstring should be in imperative mood
-	"PLR0912", # Too many branches
-  	"PLR0915", # Too many statements
-  	"PLR2004", # Magic value used in comparison, consider replacing with a constant variable]
+    "COM812", # Missing trailing comma
+    "D100", # Missing docstring in public module
+    "D101", # Missing docstring in public class
+    "D102", # Missing docstring in public method
+    "D103", # Missing docstring in public function
+    "D104", # Missing docstring in public package
+    "D105", # Missing docstring in magic method
+    "D401", # First line of docstring should be in imperative mood
+    "PLR0912", # Too many branches
+    "PLR0915", # Too many statements
+    "PLR2004", # Magic value used in comparison, consider replacing with a constant variable
 ]
 # Allow fix for all enabled rules (when `--fix`) is provided.
 fixable = []
