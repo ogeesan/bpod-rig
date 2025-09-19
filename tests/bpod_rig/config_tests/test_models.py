@@ -9,7 +9,7 @@ from pydantic import ValidationError
 from bpod_rig.config.base import SettingsMetadata
 from bpod_rig.config.system_settings import SystemPaths
 
-class TestBaseModel(unittest.TestCase):
+class TestMetadataModel(unittest.TestCase):
     def test_default(self): # NOQA N802
         bm = SettingsMetadata()
         self.assertEqual(bm.creation_date, datetime.date.today())
@@ -49,9 +49,9 @@ class TestSystemPathsModel(unittest.TestCase):
     def setUp(self):
         self.working_dir = pathlib.Path(tempfile.mkdtemp())
         self.bpod_dir = self.working_dir.joinpath('Bpod')
-        self.config_dir = self.working_dir.joinpath('Config')
-        self.protocol_dir = self.working_dir.joinpath('Protocols')
-        self.data_dir = self.working_dir.joinpath('Data')
+        self.config_dir = self.bpod_dir.joinpath('Config')
+        self.protocol_dir = self.bpod_dir.joinpath('Protocols')
+        self.data_dir = self.bpod_dir.joinpath('Data')
         # self.log_dir = self.working_dir.joinpath('Logs')
         # TODO: enable this once we add log dir
 
@@ -100,7 +100,18 @@ class TestSystemPathsModel(unittest.TestCase):
                 base_config_dir=self.config_dir,
             )
 
+    def test_pass_username(self):
+        self.bpod_dir.mkdir(exist_ok=True)
+        self.data_dir.mkdir(exist_ok=True)
+        self.protocol_dir.mkdir(exist_ok=True)
+        self.config_dir.mkdir(exist_ok=True)
 
+        sp = SystemPaths(
+            base_dir=self.bpod_dir,
+            username="valid_username"
+        )
+
+        self.assertEqual(sp.metadata.username, "valid_username")
 
     def tearDown(self):
         # Since we are not using a context manager we gotta clean this up on our own
