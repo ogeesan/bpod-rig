@@ -3,7 +3,7 @@
 
 from typing import Annotated, Optional
 from pydantic import DirectoryPath, Field, FilePath
-from config.base import SettingsBase
+from bpod_rig.config.base import ModelWithMetadata
 
 
 def bpod_path_factory(data: dict, addition: str):
@@ -27,7 +27,7 @@ def bpod_path_factory(data: dict, addition: str):
     return data["parent_dir"].joinpath(f"Machine-{data['bpod_id']}", addition)
 
 
-class BpodPaths(SettingsBase):
+class BpodPaths(ModelWithMetadata):
     bpod_id: Annotated[
         str,
         Field(
