@@ -1,7 +1,7 @@
 """Base classes for configuration classes"""
 
 import datetime
-from typing import Annotated, Any, Union, Optional
+from typing import Annotated, Any, Optional
 
 from pydantic import (
     BaseModel,
@@ -17,7 +17,7 @@ class SettingsMetadata(BaseModel):
     model_config = ConfigDict()
 
     creation_date: Annotated[
-        Union[datetime.date, PastDate],
+        datetime.date | PastDate,
         Field(
             title="Settings Creation Date",
             description="Date that this settings model was instantiated",
@@ -26,7 +26,7 @@ class SettingsMetadata(BaseModel):
 
     save_datetime: Annotated[
         Optional[
-            Union[datetime.datetime, PastDate]
+            datetime.datetime | PastDate
         ],  # Optional, but can be either type
         Field(
             None,
