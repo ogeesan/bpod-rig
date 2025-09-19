@@ -68,7 +68,7 @@ class ModelWithMetadata(BaseModel):
     metadata: Annotated[
         SettingsMetadata,
         Field(title="Model metadata", default_factory=lambda: SettingsMetadata()),
-    ]
+    ] = None
 
     # noinspection PyNestedDecorators
     @model_validator(mode="before")
