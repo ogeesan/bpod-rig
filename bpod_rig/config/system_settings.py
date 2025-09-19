@@ -2,13 +2,14 @@
 
 from typing import Annotated, Optional
 from pydantic import ConfigDict, DirectoryPath, PastDate, UUID4, Field
-from config.base import SettingsBase
-from config.bpod_settings import BpodPaths
+from bpod_rig.config.base import ModelWithMetadata
+from bpod_rig.config.bpod_settings import BpodPaths
 
 DEFAULT_PROTOCOL_DIR_NAME = "Protocols"
 DEFAULT_DATA_DIR_NAME = "Data"
 DEFAULT_CONFIG_DIR_NAME = "Config"
 DEFAULT_LOG_DIR_NAME = "Logs"
+
 
 def system_path_factory(data: dict, addition: str):
     """
@@ -33,7 +34,8 @@ def system_path_factory(data: dict, addition: str):
 
     return data["base_dir"].joinpath(addition)
 
-class SystemPaths(SettingsBase):
+
+class SystemPaths(ModelWithMetadata):
     base_dir: Annotated[
         DirectoryPath,
         Field(
@@ -56,10 +58,9 @@ class SystemPaths(SettingsBase):
             " The Protocol explorer will list all valid protocols found"
             " in this directory.",
             default_factory=lambda data: system_path_factory(
-                data,
-                DEFAULT_PROTOCOL_DIR_NAME
+                data, DEFAULT_PROTOCOL_DIR_NAME
             ),
-            validate_default=True
+            validate_default=True,
         ),
     ] = None
 
@@ -101,10 +102,8 @@ class SystemPaths(SettingsBase):
         ),
     ] = None
 
-    model_config = ConfigDict()
 
-
-class SystemSettings(SettingsBase):
+class SystemSettings(ModelWithMetadata):
     current_version: Annotated[
         str,
         Field(

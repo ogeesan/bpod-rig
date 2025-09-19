@@ -1,13 +1,21 @@
 """Base classes for configuration classes"""
 
 import datetime
-from typing import Annotated, Union, Optional, Any
+from typing import Annotated, Any, Union, Optional
 
-import pydantic.types
-from pydantic import BaseModel, Field, PastDate, validator, field_validator
+from pydantic import (
+    BaseModel,
+    ConfigDict,
+    Field,
+    PastDate,
+    field_validator,
+    model_validator,
+)
 
 
-class SettingsBase(BaseModel):
+class SettingsMetadata(BaseModel):
+    model_config = ConfigDict()
+
     creation_date: Annotated[
         Union[datetime.date, PastDate],
         Field(
@@ -42,7 +50,7 @@ class SettingsBase(BaseModel):
     @classmethod
     def validate_nonfuture(cls, value: datetime.date) -> datetime.date:
         if value > datetime.date.today():
-            raise ValueError(f'Provided creation_date {value} cannot be in the future!')
+            raise ValueError(f"Provided creation_date {value} cannot be in the future!")
         return value
 
     # noinspection PyNestedDecorators
@@ -50,13 +58,50 @@ class SettingsBase(BaseModel):
     @classmethod
     def validate_nonfuture_datetime(cls, value: datetime.datetime) -> datetime.datetime:
         if value > datetime.datetime.now():
-            raise ValueError(f'Provided save_datetime {value} cannot be in the future!')
+            raise ValueError(f"Provided save_datetime {value} cannot be in the future!")
         return value
 
 
+class ModelWithMetadata(BaseModel):
+    model_config = ConfigDict()
+
+    metadata: Annotated[
+        SettingsMetadata,
+        Field(title="Model metadata", default_factory=lambda: SettingsMetadata()),
+    ]
+
+    # noinspection PyNestedDecorators
+    @model_validator(mode="before")
+    @classmethod
+    def forward_username(cls, data: Any) -> Any:
+        """
+            For simplicity, allow the user to pass username to the SystemSettings
+            constructor for instantiating a SettingsMetadata object.
+
+            If the user provides a value for "metadata", we will assume
+            they passed an initialized and validated SettingsMetadata object. If not,
+            the fields default validation will catch it. If not and they provide
+            "username", instantiate a SettingsMetadata object with the custom username
+            and place it in the kwargs dict.
+
+        Parameters
+        ----------
+        data : Any
+            Unparsed kwargs dict passed to the SystemSettings constructor
+
+        Returns
+        -------
+        Any
+            Kwargs dict modified to be passed to the SystemSettings constructor
+        """
+        if "metadata" not in data and "username" in data:
+            # if the user passed in a dictionary for metadata, we will just forward it
+            # otherwise, forward the "username" field to SettingsMetadata and return it
+            data["metadata"] = SettingsMetadata(username=data["username"])
+        return data
 
 
-class ModuleBase(SettingsBase):
+class ModuleBase(ModelWithMetadata):
     name: Annotated[
         str,
         Field(
