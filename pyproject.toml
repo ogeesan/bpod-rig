@@ -97,6 +97,7 @@ select = [
     "PD",
     "N",
     "PERF",
+    "UP007", # use pipes for type union instead of Union
 ]
 ignore = [
 	"COM812",  # Missing trailing comma
