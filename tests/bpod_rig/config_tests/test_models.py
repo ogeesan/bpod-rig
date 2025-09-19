@@ -6,12 +6,12 @@ import unittest
 
 from pydantic import ValidationError
 
-from config.base import SettingsBase
-from bpod_rig.config.bpod_system import SystemPaths
+from bpod_rig.config.base import SettingsMetadata
+from bpod_rig.config.system_settings import SystemPaths
 
 class TestBaseModel(unittest.TestCase):
     def test_default(self): # NOQA N802
-        bm = SettingsBase()
+        bm = SettingsMetadata()
         self.assertEqual(bm.creation_date, datetime.date.today())
         self.assertIsNone(bm.save_datetime)
         self.assertEqual(bm.username, "BpodUser")
@@ -21,7 +21,7 @@ class TestBaseModel(unittest.TestCase):
         past_save_datetime = datetime.datetime(2025, 2, 1)
         new_user = "TestUser"
 
-        bm = SettingsBase(
+        bm = SettingsMetadata(
             creation_date=past_creation_date,
             save_datetime=past_save_datetime,
             username=new_user
@@ -34,16 +34,16 @@ class TestBaseModel(unittest.TestCase):
     def test_validator_failure(self):
         with self.assertRaises(ValidationError):
             future_creation_date = datetime.date(3000, 1, 1)
-            SettingsBase(creation_date=future_creation_date)
+            SettingsMetadata(creation_date=future_creation_date)
         with self.assertRaises(ValidationError):
             future_save_datetime = datetime.datetime.now() + datetime.timedelta(hours=1)
-            SettingsBase(save_datetime=future_save_datetime)
+            SettingsMetadata(save_datetime=future_save_datetime)
         with self.assertRaises(ValidationError):
             too_long_username = "a"*200
-            SettingsBase(username=too_long_username)
+            SettingsMetadata(username=too_long_username)
         with self.assertRaises(ValidationError):
             too_short_username = ""
-            SettingsBase(username=too_short_username)
+            SettingsMetadata(username=too_short_username)
 
 class TestSystemPathsModel(unittest.TestCase):
     def setUp(self):
