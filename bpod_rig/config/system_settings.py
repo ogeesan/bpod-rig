@@ -1,7 +1,8 @@
 """Module implementing the Pydantic models for any system settings"""
 
+from pathlib import Path
 from typing import Annotated, Optional
-from pydantic import DirectoryPath, PastDate, UUID4, Field
+from pydantic import PastDate, UUID4, Field
 from bpod_rig.config.base import ModelWithMetadata
 from bpod_rig.config.bpod_settings import BpodPaths
 
@@ -37,7 +38,7 @@ def system_path_factory(data: dict, addition: str):
 
 class SystemPaths(ModelWithMetadata):
     base_dir: Annotated[
-        DirectoryPath,
+        Path,
         Field(
             ...,
             title="Local Bpod Directory",
@@ -51,7 +52,7 @@ class SystemPaths(ModelWithMetadata):
     ]
 
     protocol_dir: Annotated[
-        Optional[DirectoryPath],
+        Optional[Path],
         Field(
             title="Bpod Protocol Directory",
             description="Local directory where Bpod protocols are stored."
@@ -65,7 +66,7 @@ class SystemPaths(ModelWithMetadata):
     ] = None
 
     data_dir: Annotated[
-        Optional[DirectoryPath],
+        Optional[Path],
         Field(
             title="Bpod Data Directory",
             description="Local directory where data from protocol runs are stored.",
@@ -77,7 +78,7 @@ class SystemPaths(ModelWithMetadata):
     ] = None
 
     base_config_dir: Annotated[
-        Optional[DirectoryPath],
+        Optional[Path],
         Field(
             title="Bpod Configuration Directory",
             description="Local directory where Bpod configuration files are stored.",
@@ -89,7 +90,7 @@ class SystemPaths(ModelWithMetadata):
     ] = None
 
     log_dir: Annotated[
-        Optional[DirectoryPath],
+        Optional[Path],
         Field(
             title="Bpod Log Directory",
             description="Local directory where Bpod logs are stored.",
