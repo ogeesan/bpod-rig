@@ -14,7 +14,7 @@ DEFAULT_LOG_DIR_NAME = "Logs"
 
 def system_path_factory(data: dict, addition: str):
     """
-    Function to dynamically create SytemPath subpaths at validation time.
+    Function to dynamically create SystemPath subpaths at validation time.
     Function creates a path in the below form:
 
     {base_dir}/[addition]
@@ -61,7 +61,6 @@ class SystemPaths(ModelWithMetadata):
             default_factory=lambda data: system_path_factory(
                 data, DEFAULT_PROTOCOL_DIR_NAME
             ),
-            validate_default=True,
         ),
     ] = None
 
@@ -73,7 +72,6 @@ class SystemPaths(ModelWithMetadata):
             default_factory=lambda data: system_path_factory(
                 data, DEFAULT_DATA_DIR_NAME
             ),
-            validate_default=True,
         ),
     ] = None
 
@@ -85,7 +83,6 @@ class SystemPaths(ModelWithMetadata):
             default_factory=lambda data: system_path_factory(
                 data, DEFAULT_CONFIG_DIR_NAME
             ),
-            validate_default=True,
         ),
     ] = None
 
@@ -98,7 +95,6 @@ class SystemPaths(ModelWithMetadata):
             #     data,
             #     DEFAULT_LOG_DIR_NAME
             # ),
-            # validate_default=True,
             # TODO: Add log folder to initial configuration; until then this is optional
         ),
     ] = None

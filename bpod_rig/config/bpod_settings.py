@@ -66,8 +66,8 @@ class BpodPaths(ModelWithMetadata):
         Optional[Path],
         Field(
             default_factory=lambda data: bpod_path_factory(data, "Calibration"),
-            title="Bpod Configuration Directory",
-            description="Local directory where Bpod configuration files are stored.",
+            title="Bpod Calibration Directory",
+            description="Local directory where Bpod calibration files are stored.",
         ),
     ] = None
 
