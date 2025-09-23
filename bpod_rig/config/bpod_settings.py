@@ -25,7 +25,7 @@ def subdir_path_factory(data: dict, addition: str):
     (pathlib.Path): combined path in above form
     """
 
-    if "bpod_id" not in data or "unique_bpod_dir" not in data:
+    if data["unique_bpod_dir"] is None:
         return None
 
     return data["unique_bpod_dir"].joinpath(addition)
@@ -82,7 +82,7 @@ class BpodPaths(ModelWithMetadata):
             description="Absolute path to the directory for this unique Bpod",
             default_factory=lambda data: unique_dir_path_factory(data)
         )
-    ]
+    ] = None
 
     settings_dir: Annotated[
         Optional[Path],
