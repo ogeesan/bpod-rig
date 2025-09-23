@@ -30,6 +30,7 @@ def subdir_path_factory(data: dict, addition: str):
 
     return data["unique_bpod_dir"].joinpath(addition)
 
+
 def unique_dir_path_factory(data: dict):
     """
     Function to dynamically create current directory path at validation time.
@@ -80,8 +81,8 @@ class BpodPaths(ModelWithMetadata):
         Field(
             title="Directory for this unique Bpod",
             description="Absolute path to the directory for this unique Bpod",
-            default_factory=lambda data: unique_dir_path_factory(data)
-        )
+            default_factory=lambda data: unique_dir_path_factory(data),
+        ),
     ] = None
 
     settings_dir: Annotated[
@@ -109,7 +110,6 @@ class BpodPaths(ModelWithMetadata):
             {},
             title="Bpod calibration files",
             description="Dictionary of calibration files found in the calibration "
-                        "directory for this Bpod."
-        )
+            "directory for this Bpod.",
+        ),
     ] = None
-

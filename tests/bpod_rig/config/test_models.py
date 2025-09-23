@@ -8,8 +8,9 @@ from bpod_rig.config.base import SettingsMetadata
 from bpod_rig.config.system_settings import SystemPaths
 from bpod_rig.config.bpod_settings import BpodPaths
 
+
 class TestMetadataModel(unittest.TestCase):
-    def test_default(self): # NOQA N802
+    def test_default(self):  # NOQA N802
         bm = SettingsMetadata()
         self.assertEqual(bm.creation_date, datetime.date.today())
         self.assertIsNone(bm.save_datetime)
@@ -23,7 +24,7 @@ class TestMetadataModel(unittest.TestCase):
         bm = SettingsMetadata(
             creation_date=past_creation_date,
             save_datetime=past_save_datetime,
-            username=new_user
+            username=new_user,
         )
 
         self.assertEqual(bm.creation_date, past_creation_date)
@@ -38,19 +39,20 @@ class TestMetadataModel(unittest.TestCase):
             future_save_datetime = datetime.datetime.now() + datetime.timedelta(hours=1)
             SettingsMetadata(save_datetime=future_save_datetime)
         with self.assertRaises(ValidationError):
-            too_long_username = "a"*200
+            too_long_username = "a" * 200
             SettingsMetadata(username=too_long_username)
         with self.assertRaises(ValidationError):
             too_short_username = ""
             SettingsMetadata(username=too_short_username)
 
+
 class TestSystemPathsModel(unittest.TestCase):
     def setUp(self):
         self.working_dir = pathlib.Path.home()
-        self.bpod_dir = self.working_dir.joinpath('Bpod')
-        self.config_dir = self.bpod_dir.joinpath('Config')
-        self.protocol_dir = self.bpod_dir.joinpath('Protocols')
-        self.data_dir = self.bpod_dir.joinpath('Data')
+        self.bpod_dir = self.working_dir.joinpath("Bpod")
+        self.config_dir = self.bpod_dir.joinpath("Config")
+        self.protocol_dir = self.bpod_dir.joinpath("Protocols")
+        self.data_dir = self.bpod_dir.joinpath("Data")
         # self.log_dir = self.working_dir.joinpath('Logs')
         # TODO: enable this once we add log dir
 
@@ -72,33 +74,28 @@ class TestSystemPathsModel(unittest.TestCase):
         self.protocol_dir.mkdir(exist_ok=True)
         self.config_dir.mkdir(exist_ok=True)
 
-        sp = SystemPaths(
-            base_dir=self.bpod_dir,
-            username="valid_username"
-        )
+        sp = SystemPaths(base_dir=self.bpod_dir, username="valid_username")
 
         self.assertEqual(sp.metadata.username, "valid_username")
 
     def test_not_paths(self):
         with self.assertRaises(ValidationError):
             SystemPaths(base_dir=1234321)
-        sp = SystemPaths(base_dir='/this/is/a/path')
+        sp = SystemPaths(base_dir="/this/is/a/path")
         self.assertIsInstance(sp.base_dir, pathlib.Path)
 
 
 class TestBpodPathsModel(unittest.TestCase):
     def setUp(self):
         self.working_dir = pathlib.Path.home()
-        self.base_dir = self.working_dir.joinpath('Bpods')
+        self.base_dir = self.working_dir.joinpath("Bpods")
 
         self.bpod_ID = "1234"
         self.bpod_dir = self.base_dir.joinpath(f"Machine-{self.bpod_ID}")
         self.config_dir = self.bpod_dir.joinpath("Settings")
         self.calibration_dir = self.bpod_dir.joinpath("Calibration")
 
-
     def test_ID_validation(self):
-
         with self.assertRaises(ValidationError):
             BpodPaths(parent_dir=self.bpod_dir)
             # No ID, fails validation
@@ -112,16 +109,12 @@ class TestBpodPathsModel(unittest.TestCase):
         bp = BpodPaths(bpod_id=self.bpod_ID, parent_dir=self.base_dir)
         self.assertEqual(bp.bpod_id, self.bpod_ID)
 
-
     def test_default_factory(self):
-
         bp = BpodPaths(bpod_id=self.bpod_ID, parent_dir=self.base_dir)
         self.assertEqual(bp.unique_bpod_dir, self.bpod_dir)
         self.assertEqual(bp.parent_dir, self.base_dir)
         self.assertEqual(bp.calibration_dir, self.calibration_dir)
         self.assertEqual(bp.settings_dir, self.config_dir)
-
-
 
 
 if __name__ == "__main__":
