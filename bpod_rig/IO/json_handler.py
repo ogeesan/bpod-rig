@@ -42,6 +42,7 @@ def write_json(
             json_stream.write(json_content)
     except (IOError, OSError) as e:
         logger.error("Error writing file to disk!", exc_info=e)
+        return None
 
     return full_save_path
 
