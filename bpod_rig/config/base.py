@@ -25,9 +25,7 @@ class SettingsMetadata(BaseModel):
     ] = datetime.date.today()
 
     save_datetime: Annotated[
-        Optional[
-            datetime.datetime | PastDate
-        ],  # Optional, but can be either type
+        Optional[datetime.datetime | PastDate],  # Optional, but can be either type
         Field(
             None,
             title="Settings Save Date and Time",
