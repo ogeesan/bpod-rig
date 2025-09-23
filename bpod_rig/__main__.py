@@ -3,7 +3,7 @@
 import logging
 
 from bpod_rig.config import initial_configuration
-from bpod_rig.IO import default_setup, save_load_config
+from bpod_rig.IO import default_setup, json_handler
 
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
@@ -21,8 +21,6 @@ def main():
     inital_system_config = initial_configuration.init_system_configuration(
         bpod_directory
     )
-
-    save_path = save_load_config.save_config_to_disk(inital_system_config)
 
 if __name__ == "__main__":
     main()

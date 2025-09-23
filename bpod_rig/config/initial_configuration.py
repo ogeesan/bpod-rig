@@ -1,4 +1,3 @@
-import datetime
 from pathlib import Path
 
 from config.system_settings import SystemPaths, SystemSettings
@@ -6,15 +5,10 @@ from config.system_settings import SystemPaths, SystemSettings
 
 def init_system_configuration(bpod_dir: Path) -> SystemSettings:
     system_paths = SystemPaths(
-        creation_date=datetime.date.today(),
+        username="Austin-PC",
         base_dir=bpod_dir,
-        data_dir=bpod_dir.joinpath("Data"),
-        config_dir=bpod_dir.joinpath("Config"),
-        protocol_dir=bpod_dir.joinpath("Protocols"),
-        # log_dir=bpod_dir.joinpath("Logs")
     )
 
-    system_settings = SystemSettings(paths=system_paths)
-
+    system_settings = SystemSettings(username="Austin-PC", paths=system_paths)
+    print(system_settings.model_dump_json(indent=2))
     return system_settings
-
