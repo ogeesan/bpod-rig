@@ -1,5 +1,6 @@
 """Module implementing the Pydantic models for any system settings"""
-
+import datetime
+import logging
 from pathlib import Path
 from typing import Annotated, Optional
 from pydantic import PastDate, UUID4, Field
@@ -11,6 +12,7 @@ DEFAULT_DATA_DIR_NAME = "Data"
 DEFAULT_CONFIG_DIR_NAME = "Config"
 DEFAULT_LOG_DIR_NAME = "Logs"
 
+logger = logging.getLogger(__name__)
 
 def system_path_factory(data: dict, addition: str):
     """
@@ -161,3 +163,31 @@ class SystemSettings(ModelWithMetadata):
             " the folder structure for each unique Bpod",
         ),
     ] = None
+
+    def set_save_time(self, date_time: datetime.datetime) -> bool:
+        """
+        Update all metadata save_time fields.
+
+        Parameters
+        ----------
+        date_time : datetime.datetime
+        Date and time to update metadata save_time fields to
+
+        Returns
+        -------
+        bool
+            If successful, return True, else return False
+        """
+        try:
+            self.metadata.save_datetime = date_time
+            self.paths.metadata.save_datetime = date_time
+            if self.bpod_dirs:
+                for bpod_dir in self.bpod_dirs:
+                    bpod_dir.metadata.save_datetime = date_time
+        except Exception as e:
+            logger.error("Error setting save_time fields!", exc_info=e)
+            return False
+
+        return True
+
+
