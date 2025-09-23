@@ -6,7 +6,7 @@ from pydantic import Field
 from bpod_rig.config.base import ModelWithMetadata
 
 
-def bpod_path_factory(data: dict, addition: str):
+def subdir_path_factory(data: dict, addition: str):
     """
     Function to dynamically create BpodPaths subpaths at validation time.
     Function creates a path in the below form:
@@ -25,10 +25,33 @@ def bpod_path_factory(data: dict, addition: str):
     (pathlib.Path): combined path in above form
     """
 
-    if "bpod_id" not in data:
+    if "bpod_id" not in data or "unique_bpod_dir" not in data:
         return None
 
-    return data["parent_dir"].joinpath(f"Machine-{data['bpod_id']}", addition)
+    return data["unique_bpod_dir"].joinpath(addition)
+
+def unique_dir_path_factory(data: dict):
+    """
+    Function to dynamically create current directory path at validation time.
+    Function creates a path in the below form:
+
+    {Parent_Dir}/Machine-{Bpod_ID}
+
+    Path components in {} are retrieved from the dictionary of pre-validated data.
+
+    Parameters
+    ----------
+    data (dict): Dictionary containing all previously validated fields
+
+    Returns
+    -------
+    (pathlib.Path): combined path in above form
+    """
+
+    if "bpod_id" not in data or "parent_dir" not in data:
+        return None
+
+    return data["parent_dir"].joinpath(f"Machine-{data['bpod_id']}")
 
 
 class BpodPaths(ModelWithMetadata):
@@ -52,20 +75,29 @@ class BpodPaths(ModelWithMetadata):
         ),
     ]
 
-    config_dir: Annotated[
+    unique_bpod_dir: Annotated[
+        Path,
+        Field(
+            title="Directory for this unique Bpod",
+            description="Absolute path to the directory for this unique Bpod",
+            default_factory=lambda data: unique_dir_path_factory(data)
+        )
+    ]
+
+    settings_dir: Annotated[
         Optional[Path],
         Field(
-            title="Bpod Configuration Subdirectory",
-            description="Sub directory where Bpod configuration files are "
+            title="Bpod Settings Subdirectory",
+            description="Sub directory where Bpod settings files are "
             "stored for this unique Bpod",
-            default_factory=lambda data: bpod_path_factory(data, "Config"),
+            default_factory=lambda data: subdir_path_factory(data, "Settings"),
         ),
     ] = None
 
     calibration_dir: Annotated[
         Optional[Path],
         Field(
-            default_factory=lambda data: bpod_path_factory(data, "Calibration"),
+            default_factory=lambda data: subdir_path_factory(data, "Calibration"),
             title="Bpod Calibration Directory",
             description="Local directory where Bpod calibration files are stored.",
         ),
