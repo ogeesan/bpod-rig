@@ -49,8 +49,16 @@ def save_system_configuration(
 
     save_dir = system_settings.paths.base_config_dir
 
-    if save_dir_override is not None and save_dir_override.exists():
-        save_dir = save_dir_override
+    if save_dir_override is not None:
+        if save_dir_override.exists():
+            save_dir = save_dir_override
+        else:
+            logger.error(
+                "User-provided save directory [%s] does not exist!",
+                save_dir_override
+            )
+            return None
+
 
     system_settings_json = system_settings.model_dump_json(indent=2)
 
