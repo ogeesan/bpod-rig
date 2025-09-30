@@ -6,6 +6,9 @@ from pathlib import Path
 from bpod_rig.config.system_settings import SystemSettings, SystemPaths
 from bpod_rig.config import utils
 
+JSON_STRING = '{"first_key":{"second_key": "1234"}}'
+
+
 class TestSave(unittest.TestCase):
     def setUp(self):
         self.bpod_dir = Path(tempfile.mkdtemp())
@@ -62,7 +65,35 @@ class TestSave(unittest.TestCase):
 
 class TestLoad(unittest.TestCase):
     def setUp(self):
-        pass
+        self.bpod_dir = Path(tempfile.mkdtemp())
+        self.config_dir = self.bpod_dir.joinpath("Config")
+        self.config_dir.mkdir(exist_ok=True)
+        self.sp = SystemPaths(base_dir=self.bpod_dir)
+        self.ss = SystemSettings(paths=self.sp)
+        self.full_file_path = self.ss.paths.base_config_dir.joinpath("config.json")
+
+
+    def test_load(self):
+        with open(self.full_file_path, 'w') as fs:
+            fs.write(self.ss.model_dump_json(indent=2))
+            # We will manually write file to bypass the save_system_config function
+
+        loaded_system_settings = utils.load_system_configuration(self.full_file_path)
+        self.assertEqual(loaded_system_settings, self.ss)
+
+    def test_bad_json(self):
+        with open(self.full_file_path, 'w') as fs:
+            fs.write(self.ss.model_dump_json(indent=2)[:-1])
+            # We will manually write file to bypass the save_system_config function
+        loaded_system_settings = utils.load_system_configuration(self.full_file_path)
+        self.assertIsNone(loaded_system_settings)
+
+    def test_invalid_schema(self):
+        with open(self.full_file_path, 'w') as fs:
+            fs.write(JSON_STRING)
+        loaded_system_settings = utils.load_system_configuration(self.full_file_path)
+        self.assertIsNone(loaded_system_settings)
+
 
     def tearDown(self):
         pass
