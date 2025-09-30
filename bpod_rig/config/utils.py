@@ -54,11 +54,9 @@ def save_system_configuration(
             save_dir = save_dir_override
         else:
             logger.error(
-                "User-provided save directory [%s] does not exist!",
-                save_dir_override
+                "User-provided save directory [%s] does not exist!", save_dir_override
             )
             return None
-
 
     system_settings_json = system_settings.model_dump_json(indent=2)
 

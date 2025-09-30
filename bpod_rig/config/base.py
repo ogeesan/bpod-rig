@@ -55,7 +55,6 @@ class SettingsMetadata(BaseModel):
     @field_validator("save_datetime", mode="after")
     @classmethod
     def validate_nonfuture_datetime(cls, value: datetime.datetime) -> datetime.datetime:
-
         if value is not None and value > datetime.datetime.now():
             raise ValueError(f"Provided save_datetime {value} cannot be in the future!")
         return value
