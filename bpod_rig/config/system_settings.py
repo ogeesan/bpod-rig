@@ -1,4 +1,5 @@
 """Module implementing the Pydantic models for any system settings"""
+
 import datetime
 import logging
 from pathlib import Path
@@ -13,6 +14,7 @@ DEFAULT_CONFIG_DIR_NAME = "Config"
 DEFAULT_LOG_DIR_NAME = "Logs"
 
 logger = logging.getLogger(__name__)
+
 
 def system_path_factory(data: dict, addition: str):
     """
@@ -189,5 +191,3 @@ class SystemSettings(ModelWithMetadata):
             return False
 
         return True
-
-
