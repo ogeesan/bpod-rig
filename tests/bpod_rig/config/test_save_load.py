@@ -34,10 +34,12 @@ class TestSave(unittest.TestCase):
             save_dir_override=self.ss.paths.base_dir
         )
 
-        self.assertEqual(save_path, self.full_file_path)
-        self.assertTrue(self.full_file_path.exists())
+        alt_file_path = self.ss.paths.base_dir.joinpath("config.json")
 
-        with open(self.full_file_path, 'r') as fs:
+        self.assertEqual(save_path,alt_file_path)
+        self.assertTrue(alt_file_path.exists())
+
+        with open(alt_file_path, 'r') as fs:
             self.assertEqual(fs.read(), self.ss.model_dump_json(indent=2))
 
     def test_invalid_default_path(self):
