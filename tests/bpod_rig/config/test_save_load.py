@@ -20,6 +20,10 @@ class TestSave(unittest.TestCase):
 
         self.assertEqual(save_path, full_file_path)
         self.assertTrue(full_file_path.exists())
+
+        with open(full_file_path, 'r') as fs:
+            self.assertEqual(fs.read(), self.ss.model_dump_json(indent=2))
+
         # On success, the save path is returned
 
     def test_save_path_override(self):
@@ -32,6 +36,9 @@ class TestSave(unittest.TestCase):
 
         self.assertEqual(save_path, full_file_path)
         self.assertTrue(full_file_path.exists())
+
+        with open(full_file_path, 'r') as fs:
+            self.assertEqual(fs.read(), self.ss.model_dump_json(indent=2))
 
     def test_invalid_default_path(self):
         save_path = utils.save_system_configuration(self.ss)
