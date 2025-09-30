@@ -12,16 +12,17 @@ class TestSave(unittest.TestCase):
         self.config_dir = self.bpod_dir.joinpath("Config")
         self.sp = SystemPaths(base_dir=self.bpod_dir)
         self.ss = SystemSettings(paths=self.sp)
+        self.full_file_path = self.ss.paths.base_config_dir.joinpath("config.json")
+
 
     def test_save(self):
         self.config_dir.mkdir(exist_ok=True)
         save_path = utils.save_system_configuration(self.ss)
-        full_file_path = self.ss.paths.base_config_dir.joinpath("config.json")
 
-        self.assertEqual(save_path, full_file_path)
-        self.assertTrue(full_file_path.exists())
+        self.assertEqual(save_path, self.full_file_path)
+        self.assertTrue(self.full_file_path.exists())
 
-        with open(full_file_path, 'r') as fs:
+        with open(self.full_file_path, 'r') as fs:
             self.assertEqual(fs.read(), self.ss.model_dump_json(indent=2))
 
         # On success, the save path is returned
@@ -32,12 +33,11 @@ class TestSave(unittest.TestCase):
             self.ss,
             save_dir_override=self.ss.paths.base_dir
         )
-        full_file_path = self.ss.paths.base_dir.joinpath("config.json")
 
-        self.assertEqual(save_path, full_file_path)
-        self.assertTrue(full_file_path.exists())
+        self.assertEqual(save_path, self.full_file_path)
+        self.assertTrue(self.full_file_path.exists())
 
-        with open(full_file_path, 'r') as fs:
+        with open(self.full_file_path, 'r') as fs:
             self.assertEqual(fs.read(), self.ss.model_dump_json(indent=2))
 
     def test_invalid_default_path(self):
@@ -54,6 +54,13 @@ class TestSave(unittest.TestCase):
 
         self.assertIsNone(save_path)
 
-
     def tearDown(self):
         shutil.rmtree(self.bpod_dir, ignore_errors=True)
+
+
+class TestLoad(unittest.TestCase):
+    def setUp(self):
+        pass
+
+    def tearDown(self):
+        pass
