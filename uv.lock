@@ -57,6 +57,10 @@ dependencies = [
 ]
 
 [package.dev-dependencies]
+dev = [
+    { name = "pytest" },
+    { name = "pytest-cov" },
+]
 test = [
     { name = "pytest" },
     { name = "pytest-cov" },
@@ -66,6 +70,10 @@ test = [
 requires-dist = [{ name = "bpod-core" }]
 
 [package.metadata.requires-dev]
+dev = [
+    { name = "pytest", specifier = ">=8.4.2" },
+    { name = "pytest-cov", specifier = ">=7.0.0" },
+]
 test = [
     { name = "pytest", specifier = ">=8.4.2" },
     { name = "pytest-cov", specifier = ">=7.0.0" },

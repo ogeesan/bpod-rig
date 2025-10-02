@@ -151,6 +151,9 @@ docstring-code-format = false
 docstring-code-line-length = "dynamic"
 
 [dependency-groups]
+dev = [
+    {include-group = "test"},
+]
 test = [
     "pytest>=8.4.2",
     "pytest-cov>=7.0.0",

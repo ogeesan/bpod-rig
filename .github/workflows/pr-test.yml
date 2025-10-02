@@ -36,7 +36,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-            uv sync --locked --all-extras --dev
+            uv sync --locked --all-extras
             uv run python -m pytest --cov --cov-report=xml
 
       - name: Upload coverage to Coveralls
