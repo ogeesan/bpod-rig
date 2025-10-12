@@ -157,3 +157,4 @@ cython_debug/
 
 # Pycharm project files that we dont want to commit
 .idea/misc.xml
+.idea/ruff.xml

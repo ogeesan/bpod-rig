@@ -152,7 +152,8 @@ docstring-code-line-length = "dynamic"
 
 [dependency-groups]
 dev = [
-    {include-group = "test"},
+    "ruff>=0.14.0",
+    { include-group = "test" },
 ]
 test = [
     "pytest>=8.4.2",
