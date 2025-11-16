@@ -170,7 +170,7 @@ class SystemSettings(ModelWithMetadata):
         ),
     ] = None
 
-    def set_save_time(self, date_time: datetime.datetime) -> bool:
+    def set_modification_time(self, date_time: datetime.datetime) -> bool:
         """
         Update all metadata save_time fields.
 
@@ -185,11 +185,11 @@ class SystemSettings(ModelWithMetadata):
             If successful, return True, else return False.
         """
         try:
-            self.metadata.save_datetime = date_time
-            self.paths.metadata.save_datetime = date_time
+            self.metadata.modified_datetime = date_time
+            self.paths.metadata.modified_datetime = date_time
             if self.bpod_dirs:
                 for bpod_dir in self.bpod_dirs:
-                    bpod_dir.metadata.save_datetime = date_time
+                    bpod_dir.metadata.modified_datetime = date_time
         except Exception as e:
             logger.error("Error setting save_time fields!", exc_info=e)
             return False

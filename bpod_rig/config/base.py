@@ -24,7 +24,7 @@ class SettingsMetadata(BaseModel):
         ),
     ] = datetime.date.today()
 
-    save_datetime: Annotated[
+    modified_datetime: Annotated[
         Optional[datetime.datetime | PastDate],  # Optional, but can be either type
         Field(
             None,
@@ -37,7 +37,7 @@ class SettingsMetadata(BaseModel):
         str,
         Field(
             min_length=1,
-            max_length=128,
+            max_length=128, 
             title="Username of settings creator",
             description="Username of the creator of this settings model.",
         ),
@@ -52,11 +52,11 @@ class SettingsMetadata(BaseModel):
         return value
 
     # noinspection PyNestedDecorators
-    @field_validator("save_datetime", mode="after")
+    @field_validator("modified_datetime", mode="after")
     @classmethod
     def validate_nonfuture_datetime(cls, value: datetime.datetime) -> datetime.datetime:
         if value is not None and value > datetime.datetime.now():
-            raise ValueError(f"Provided save_datetime {value} cannot be in the future!")
+            raise ValueError(f"Provided modified_datetime {value} cannot be in the future!")
         return value
 
 

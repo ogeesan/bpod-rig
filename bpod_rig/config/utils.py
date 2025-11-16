@@ -45,7 +45,7 @@ def save_system_configuration(
     """
     logger.debug("Saving system configuration as JSON!")
     save_datetime = datetime.datetime.now()
-    system_settings.set_save_time(save_datetime)
+    system_settings.set_modification_time(save_datetime)
 
     save_dir = system_settings.paths.base_config_dir
 

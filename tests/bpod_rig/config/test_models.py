@@ -14,7 +14,7 @@ class TestMetadataModel:
         """Tests the default values of the SettingsMetadata model."""
         bm = SettingsMetadata()
         assert bm.creation_date == datetime.date.today()
-        assert bm.save_datetime is None
+        assert bm.modified_datetime is None
         assert bm.username == "BpodUser"
 
     def test_good_manual_vals(self):
@@ -25,12 +25,12 @@ class TestMetadataModel:
 
         bm = SettingsMetadata(
             creation_date=past_creation_date,
-            save_datetime=past_save_datetime,
+            modified_datetime=past_save_datetime,
             username=new_user,
         )
 
         assert bm.creation_date == past_creation_date
-        assert bm.save_datetime == past_save_datetime
+        assert bm.modified_datetime == past_save_datetime
         assert bm.username == new_user
 
     def test_validator_failure(self):
@@ -41,7 +41,7 @@ class TestMetadataModel:
 
         with pytest.raises(ValidationError):
             future_save_datetime = datetime.datetime.now() + datetime.timedelta(hours=1)
-            SettingsMetadata(save_datetime=future_save_datetime)
+            SettingsMetadata(modified_datetime=future_save_datetime)
 
         with pytest.raises(ValidationError):
             too_long_username = "a" * 200
