@@ -54,9 +54,9 @@ class TestMetadataModel:
 
 class TestSystemPathsModel:
     @pytest.fixture
-    def paths(self):
+    def paths(self, tmp_path):
         """Fixture to provide a common set of path objects for tests."""
-        working_dir = pathlib.Path.home()
+        working_dir = tmp_path
         bpod_dir = working_dir.joinpath("Bpod")
         return {
             "bpod_dir": bpod_dir,
@@ -94,9 +94,9 @@ class TestSystemPathsModel:
 
 class TestBpodPathsModel:
     @pytest.fixture
-    def paths(self):
+    def paths(self, tmp_path):
         """Fixture to provide a common set of Bpod-specific path objects."""
-        working_dir = pathlib.Path.home()
+        working_dir = tmp_path
         base_dir = working_dir.joinpath("Bpods")
         bpod_id = "1234"
         bpod_dir = base_dir.joinpath(f"Machine-{bpod_id}")
