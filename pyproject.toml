@@ -19,9 +19,7 @@ dependencies = [
     "bpod-core",
     #"bpod-gui"
 	"bpod-core>=0.1.0a2",
-	#"bpod-gui"
 	"pydantic==2.11.7",
-	"pydantic-settings==2.10.1",
 ]
 
 [project.urls]
@@ -115,6 +113,7 @@ ignore = [
     "PLR0912", # Too many branches
     "PLR0915", # Too many statements
     "PLR2004", # Magic value used in comparison, consider replacing with a constant variable
+    "S101", # Use of assert
 ]
 # Allow fix for all enabled rules (when `--fix`) is provided.
 fixable = []
@@ -152,3 +151,12 @@ docstring-code-format = false
 # This only has an effect when the `docstring-code-format` setting is
 # enabled.
 docstring-code-line-length = "dynamic"
+
+[dependency-groups]
+dev = [
+    {include-group = "test"},
+]
+test = [
+    "pytest>=8.4.2",
+    "pytest-cov>=7.0.0",
+]

@@ -1,7 +1,8 @@
 import shutil
 import tempfile
-import unittest
 from pathlib import Path
+
+import pytest
 
 from bpod_rig.config.system_settings import SystemSettings, SystemPaths
 from bpod_rig.config import utils
@@ -9,91 +10,105 @@ from bpod_rig.config import utils
 JSON_STRING = '{"first_key":{"second_key": "1234"}}'
 
 
-class TestSave(unittest.TestCase):
-    def setUp(self):
-        self.bpod_dir = Path(tempfile.mkdtemp())
-        self.config_dir = self.bpod_dir.joinpath("Config")
-        self.sp = SystemPaths(base_dir=self.bpod_dir)
-        self.ss = SystemSettings(paths=self.sp)
-        self.full_file_path = self.ss.paths.base_config_dir.joinpath("config.json")
+@pytest.fixture
+def temp_config():
+    """
+    A pytest fixture that sets up a temporary directory structure and
+    configuration objects for testing. It handles cleanup automatically
+    after the test using it has finished.
+    """
+    # --- Setup ---
+    bpod_dir = Path(tempfile.mkdtemp())
+    config_dir = bpod_dir.joinpath("Config")
+    sp = SystemPaths(base_dir=bpod_dir)
+    ss = SystemSettings(paths=sp)
+    full_file_path = ss.paths.base_config_dir.joinpath("config.json")
+
+    # Yield the created objects to the test function
+    yield ss, config_dir, full_file_path, bpod_dir
+
+    # --- Teardown ---
+    shutil.rmtree(bpod_dir, ignore_errors=True)
 
 
-    def test_save(self):
-        self.config_dir.mkdir(exist_ok=True)
-        save_path = utils.save_system_configuration(self.ss)
+class TestSave:
+    def test_save(self, temp_config):
+        """Tests that the configuration is saved to the default path correctly."""
+        ss, config_dir, full_file_path, _ = temp_config
+        config_dir.mkdir(exist_ok=True)
+        save_path = utils.save_system_configuration(ss)
 
-        self.assertEqual(save_path, self.full_file_path)
-        self.assertTrue(self.full_file_path.exists())
+        assert save_path == full_file_path
+        assert full_file_path.exists()
 
-        with open(self.full_file_path, 'r') as fs:
-            self.assertEqual(fs.read(), self.ss.model_dump_json(indent=2))
+        with open(full_file_path, 'r') as fs:
+            assert fs.read() == ss.model_dump_json(indent=2)
 
-        # On success, the save path is returned
-
-    def test_save_path_override(self):
-        self.config_dir.mkdir(exist_ok=True)
+    def test_save_path_override(self, temp_config):
+        """Tests that the configuration can be saved to a non-default directory."""
+        ss, config_dir, _, bpod_dir = temp_config
+        config_dir.mkdir(exist_ok=True)
         save_path = utils.save_system_configuration(
-            self.ss,
-            save_dir_override=self.ss.paths.base_dir
+            ss,
+            save_dir_override=ss.paths.base_dir
         )
 
-        alt_file_path = self.ss.paths.base_dir.joinpath("config.json")
+        alt_file_path = bpod_dir.joinpath("config.json")
 
-        self.assertEqual(save_path,alt_file_path)
-        self.assertTrue(alt_file_path.exists())
+        assert save_path == alt_file_path
+        assert alt_file_path.exists()
 
         with open(alt_file_path, 'r') as fs:
-            self.assertEqual(fs.read(), self.ss.model_dump_json(indent=2))
+            assert fs.read() == ss.model_dump_json(indent=2)
 
-    def test_invalid_default_path(self):
-        save_path = utils.save_system_configuration(self.ss)
-        self.assertIsNone(save_path)
-        # If the default directory doesn't exist this should return None
+    def test_invalid_default_path(self, temp_config):
+        """Tests that saving fails and returns None if the default directory does not exist."""
+        ss, _, _, _ = temp_config
+        # Note: We don't create the config_dir here
+        save_path = utils.save_system_configuration(ss)
+        assert save_path is None
 
-    def test_invalid_override_path(self):
-        invalid_dir = self.bpod_dir.joinpath("InvalidDir")
+    def test_invalid_override_path(self, temp_config):
+        """Tests that saving fails and returns None if the override directory does not exist."""
+        ss, _, _, bpod_dir = temp_config
+        invalid_dir = bpod_dir.joinpath("InvalidDir")
         save_path = utils.save_system_configuration(
-            self.ss,
+            ss,
             save_dir_override=invalid_dir
         )
-
-        self.assertIsNone(save_path)
-
-    def tearDown(self):
-        shutil.rmtree(self.bpod_dir, ignore_errors=True)
+        assert save_path is None
 
 
-class TestLoad(unittest.TestCase):
-    def setUp(self):
-        self.bpod_dir = Path(tempfile.mkdtemp())
-        self.config_dir = self.bpod_dir.joinpath("Config")
-        self.config_dir.mkdir(exist_ok=True)
-        self.sp = SystemPaths(base_dir=self.bpod_dir)
-        self.ss = SystemSettings(paths=self.sp)
-        self.full_file_path = self.ss.paths.base_config_dir.joinpath("config.json")
+class TestLoad:
+    def test_load(self, temp_config):
+        """Tests that a valid configuration file can be loaded into a SystemSettings object."""
+        ss, config_dir, full_file_path, _ = temp_config
+        config_dir.mkdir(exist_ok=True)
 
+        with open(full_file_path, 'w') as fs:
+            fs.write(ss.model_dump_json(indent=2))
 
-    def test_load(self):
-        with open(self.full_file_path, 'w') as fs:
-            fs.write(self.ss.model_dump_json(indent=2))
-            # We will manually write file to bypass the save_system_config function
+        loaded_system_settings = utils.load_system_configuration(full_file_path)
+        assert loaded_system_settings == ss
 
-        loaded_system_settings = utils.load_system_configuration(self.full_file_path)
-        self.assertEqual(loaded_system_settings, self.ss)
+    def test_bad_json(self, temp_config):
+        """Tests that loading returns None when the file contains invalid JSON."""
+        ss, config_dir, full_file_path, _ = temp_config
+        config_dir.mkdir(exist_ok=True)
 
-    def test_bad_json(self):
-        with open(self.full_file_path, 'w') as fs:
-            fs.write(self.ss.model_dump_json(indent=2)[:-1])
-            # We will manually write file to bypass the save_system_config function
-        loaded_system_settings = utils.load_system_configuration(self.full_file_path)
-        self.assertIsNone(loaded_system_settings)
+        with open(full_file_path, 'w') as fs:
+            fs.write(ss.model_dump_json(indent=2)[:-1]) # Write incomplete JSON
 
-    def test_invalid_schema(self):
-        with open(self.full_file_path, 'w') as fs:
+        loaded_system_settings = utils.load_system_configuration(full_file_path)
+        assert loaded_system_settings is None
+
+    def test_invalid_schema(self, temp_config):
+        """Tests that loading returns None when the JSON does not match the pydantic model schema."""
+        _, config_dir, full_file_path, _ = temp_config
+        config_dir.mkdir(exist_ok=True)
+
+        with open(full_file_path, 'w') as fs:
             fs.write(JSON_STRING)
-        loaded_system_settings = utils.load_system_configuration(self.full_file_path)
-        self.assertIsNone(loaded_system_settings)
 
-
-    def tearDown(self):
-        pass
+        loaded_system_settings = utils.load_system_configuration(full_file_path)
+        assert loaded_system_settings is None

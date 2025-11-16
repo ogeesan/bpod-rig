@@ -1,35 +1,48 @@
 import shutil
 import tempfile
-import unittest
 from pathlib import Path
+
+import pytest
 from bpod_rig.IO import json_handler
 
 JSON_STRING = '{"first_key":{"second_key": "1234"}}'
 
 
-class TestJSONHandler(unittest.TestCase):
-    def setUp(self):
-        self.tempdir = Path(tempfile.mkdtemp())
+@pytest.fixture
+def temp_dir():
+    """
+    A pytest fixture that creates a temporary directory for a test
+    and handles cleanup automatically after the test has finished.
+    """
+    # --- Setup ---
+    tempdir_path = Path(tempfile.mkdtemp())
+    yield tempdir_path
+    # --- Teardown ---
+    shutil.rmtree(tempdir_path, ignore_errors=True)
 
-    def test_save(self):
-        full_path = self.tempdir.joinpath("temp.json")
+
+class TestJSONHandler:
+    def test_save(self, temp_dir):
+        """Tests that a JSON string can be successfully written to a file."""
+        full_path = temp_dir.joinpath("temp.json")
 
         returned_path = json_handler.write_json(
             JSON_STRING,
-            self.tempdir,
+            temp_dir,
             "temp"
         )
 
-        self.assertEqual(returned_path, full_path)
-        self.assertTrue(full_path.exists())
+        assert returned_path == full_path
+        assert full_path.exists()
 
         with open(full_path, 'r') as fs:
             file_content = fs.read()
 
-        self.assertEqual(file_content, JSON_STRING)
+        assert file_content == JSON_STRING
 
-    def test_save_bad_path(self):
-        bad_dir = self.tempdir.joinpath("bad_dir")
+    def test_save_bad_path(self, temp_dir):
+        """Tests that write_json returns None if the target directory does not exist."""
+        bad_dir = temp_dir.joinpath("bad_dir")
 
         returned_path = json_handler.write_json(
             JSON_STRING,
@@ -37,24 +50,20 @@ class TestJSONHandler(unittest.TestCase):
             "temp"
         )
 
-        self.assertIsNone(returned_path)
+        assert returned_path is None
 
-    def test_load(self):
-        test_file = self.tempdir.joinpath("config.json")
+    def test_load(self, temp_dir):
+        """Tests that a JSON file can be successfully read."""
+        test_file = temp_dir.joinpath("config.json")
         with open(test_file, 'w') as tf:
             tf.write(JSON_STRING)
 
         returned_data = json_handler.read_json(test_file)
-        self.assertEqual(returned_data, JSON_STRING)
+        assert returned_data == JSON_STRING
 
-    def test_load_bad_path(self):
-        bad_file = self.tempdir.joinpath("dne.json")
+    def test_load_bad_path(self, temp_dir):
+        """Tests that read_json returns None if the file does not exist."""
+        bad_file = temp_dir.joinpath("dne.json")
 
         returned_data = json_handler.read_json(bad_file)
-        self.assertIsNone(returned_data)
-
-    def tearDown(self):
-        shutil.rmtree(self.tempdir, ignore_errors=True)
-
-if __name__ == "__main__":
-    unittest.main()
+        assert returned_data is None
