@@ -1,10 +1,12 @@
-"""Module implementing the Pydantic models for any system settings"""
+"""Module implementing the Pydantic models for any system settings."""
 
 import datetime
 import logging
 from pathlib import Path
 from typing import Annotated, Optional
-from pydantic import PastDate, UUID4, Field
+
+from pydantic import UUID4, Field, PastDate
+
 from bpod_rig.config.base import ModelWithMetadata
 from bpod_rig.config.bpod_settings import BpodPaths
 
@@ -16,9 +18,10 @@ DEFAULT_LOG_DIR_NAME = "Logs"
 logger = logging.getLogger(__name__)
 
 
-def system_path_factory(data: dict, addition: str):
+def system_path_factory(data: dict, addition: str) -> Path | None:
     """
     Function to dynamically create SystemPath subpaths at validation time.
+
     Function creates a path in the below form:
 
     {base_dir}/[addition]
@@ -27,12 +30,15 @@ def system_path_factory(data: dict, addition: str):
 
     Parameters
     ----------
-    data (dict): Dictionary containing all previously validated fields
-    addition (str): Addition to join to the end of the path
+    data : dict
+        Dictionary containing all previously validated fields
+    addition : str
+        Addition to join to the end of the path.
 
     Returns
     -------
-    (pathlib.Path): combined path in above form
+    pathlib.Path
+        Combined path in above form.
     """
     if "base_dir" not in data:
         return None
@@ -173,12 +179,12 @@ class SystemSettings(ModelWithMetadata):
         Parameters
         ----------
         date_time : datetime.datetime
-        Date and time to update metadata save_time fields to
+            Date and time to update metadata save_time fields to.
 
         Returns
         -------
         bool
-            If successful, return True, else return False
+            If successful, return True, else return False.
         """
         try:
             self.metadata.save_datetime = date_time
