@@ -26,36 +26,27 @@ class TestJSONHandler:
         """Tests that a JSON string can be successfully written to a file."""
         full_path = temp_dir.joinpath("temp.json")
 
-        returned_path = json_handler.write_json(
-            JSON_STRING,
-            temp_dir,
-            "temp"
-        )
+        returned_path = json_handler.write_json(JSON_STRING, temp_dir, "temp")
 
         assert returned_path == full_path
         assert full_path.exists()
 
-        with open(full_path, 'r') as fs:
+        with open(full_path, "r") as fs:
             file_content = fs.read()
 
         assert file_content == JSON_STRING
 
     def test_save_bad_path(self, temp_dir):
-        """Tests that write_json returns None if the target directory does not exist."""
+        """Tests that write_json errors if the target directory does not exist."""
         bad_dir = temp_dir.joinpath("bad_dir")
 
-        returned_path = json_handler.write_json(
-            JSON_STRING,
-            bad_dir,
-            "temp"
-        )
-
-        assert returned_path is None
+        with pytest.raises(FileNotFoundError):
+            _ = json_handler.write_json(JSON_STRING, bad_dir, "temp")
 
     def test_load(self, temp_dir):
         """Tests that a JSON file can be successfully read."""
         test_file = temp_dir.joinpath("config.json")
-        with open(test_file, 'w') as tf:
+        with open(test_file, "w") as tf:
             tf.write(JSON_STRING)
 
         returned_data = json_handler.read_json(test_file)

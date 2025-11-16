@@ -5,12 +5,11 @@ from typing import Union
 logger = logging.getLogger(__name__)
 
 
-def write_json(
-    json_content: str, save_path: Path = None, file_name: str = None
-) -> Union[Path, None]:
-    """
-    Write json-formatted data to disk. Data should be provided in a pre-formatted
-    dictionary with indentations/spaces included
+def write_json(json_content: str, save_path: Path, file_name: str) -> Path:
+    """Write json-formatted data to disk.
+
+    Data should be provided in a pre-formatted dictionary with indentations/spaces
+    included.
 
     Parameters
     ----------
@@ -26,30 +25,20 @@ def write_json(
     pathlib.Path
         The final save path with filename and extension.
     """
-
-    filename_w_ext = file_name + ".json"
     save_dir = save_path
 
     if not save_dir.exists():
-        logger.error("Save directory [%s] does not exist!", save_dir)
-        return None
+        raise FileNotFoundError(f"Save directory [{save_dir}] does not exist!")
 
-    full_save_path = save_dir.joinpath(filename_w_ext)
+    full_save_path = save_dir.joinpath(file_name).with_suffix(".json")
 
-    try:
-        with open(full_save_path, "w") as json_stream:
-            logger.debug("Saving JSON to %s", str(full_save_path))
-            json_stream.write(json_content)
-    except (IOError, OSError) as e:
-        logger.error("Error writing file to disk!", exc_info=e)
-        return None
+    full_save_path.write_text(json_content)
 
     return full_save_path
 
 
-def read_json(file_path: Path) -> Union[str, None]:
-    """
-    Read json-formatted data from disk.
+def read_json(file_path: Path) -> str | None:
+    """Read json-formatted data from disk.
 
     Parameters
     ----------
@@ -61,7 +50,6 @@ def read_json(file_path: Path) -> Union[str, None]:
     str
         Json-formatted data read from provided file path
     """
-
     if not file_path.exists():
         logger.error("File [%s] does not exist!", file_path)
         return None
