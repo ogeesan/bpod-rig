@@ -22,11 +22,12 @@ def init_system_configuration(bpod_dir: Path) -> SystemSettings:
 
 
 def save_system_configuration(
-    system_settings: SystemSettings, save_dir_override: Path = None
-) -> Path | None:
+    system_settings: SystemSettings, save_dir_override: Path | None = None
+) -> Path:
     """
     Save system_configuration instance to disk as json-formatted text.
-    Simultaneously will update the save_datetime field of the models to datetime.now()
+
+    Simultaneously will update the modified_datetime field of the models to datetime.now()
 
     Parameters
     ----------
@@ -38,25 +39,19 @@ def save_system_configuration(
 
     Returns
     -------
-        Path or None
-
-        If the file successfully saves, the path to the saved file is returned
-        If the file unsuccessfully saves, None is returned
+        Path
+        Path to the saved file is returned
     """
     logger.debug("Saving system configuration as JSON!")
-    save_datetime = datetime.datetime.now()
-    system_settings.set_modification_time(save_datetime)
+    modified_datetime = datetime.datetime.now()
+    system_settings.set_modification_time(modified_datetime)
 
-    save_dir = system_settings.paths.base_config_dir
-
-    if save_dir_override is not None:
-        if save_dir_override.exists():
-            save_dir = save_dir_override
-        else:
-            logger.error(
-                "User-provided save directory [%s] does not exist!", save_dir_override
-            )
-            return None
+    if save_dir_override is None:
+        if system_settings.paths.base_config_dir is None:
+            raise ValueError("system_settings.paths.base_config_dir is None.")
+        save_dir = system_settings.paths.base_config_dir
+    else:
+        save_dir = save_dir_override
 
     system_settings_json = system_settings.model_dump_json(indent=2)
 
@@ -66,6 +61,7 @@ def save_system_configuration(
 def load_system_configuration(config_file_path: Path) -> SystemSettings | None:
     """
     Load valid JSON from disk and validate it against the SystemSettings schema.
+
     If valid JSON is read from disk, parsed, and validated, an initialized
     SystemSettings object is returned.
 

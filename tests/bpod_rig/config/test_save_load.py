@@ -68,11 +68,11 @@ class TestSave:
             _ = utils.save_system_configuration(ss)
 
     def test_invalid_override_path(self, temp_config):
-        """Tests that saving fails and returns None if the override directory does not exist."""
+        """Tests that saving errors if the override directory does not exist."""
         ss, _, _, bpod_dir = temp_config
         invalid_dir = bpod_dir.joinpath("InvalidDir")
-        save_path = utils.save_system_configuration(ss, save_dir_override=invalid_dir)
-        assert save_path is None
+        with pytest.raises(FileNotFoundError):
+            _ = utils.save_system_configuration(ss, save_dir_override=invalid_dir)
 
 
 class TestLoad:
