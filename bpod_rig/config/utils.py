@@ -2,7 +2,6 @@ import datetime
 import logging
 from pathlib import Path
 
-from pydantic import ValidationError
 from pydantic_core import from_json
 
 from bpod_rig.config.system_settings import SystemPaths, SystemSettings
