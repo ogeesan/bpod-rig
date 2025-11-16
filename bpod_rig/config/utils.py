@@ -83,24 +83,5 @@ def load_system_configuration(config_file_path: Path) -> SystemSettings | None:
     logger.debug("Attempting to read, parse, and validate: %s", config_file_path)
 
     file_content_json = json_handler.read_json(config_file_path)
-
-    if file_content_json is not None:
-        try:
-            return SystemSettings.model_validate(
-                from_json(file_content_json, allow_partial=False)
-            )
-            # If from_json fails to parse the content of the file as JSON, a ValueError
-            # is raised. e.g. JSON structure errors
-            # If the JSON fails to validate against the SystemSettings schema a
-            # ValidationError is raised
-        except ValidationError as ve:
-            logger.error(
-                "JSON loaded from disk is not a valid SystemSettings schema!",
-                exc_info=ve,
-            )
-        except ValueError as ve:
-            logger.error("Error parsing JSON loaded from disk!", exc_info=ve)
-    else:
-        logger.error("No JSON loaded from disk, unable to load system configuration.")
-
-    return None
+    json_object = from_json(file_content_json, allow_partial=False)
+    return SystemSettings.model_validate(json_object)

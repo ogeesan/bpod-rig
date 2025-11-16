@@ -2,6 +2,7 @@ import shutil
 import tempfile
 from pathlib import Path
 
+from pydantic_core import ValidationError
 import pytest
 
 from bpod_rig.config.system_settings import SystemSettings, SystemPaths
@@ -88,15 +89,15 @@ class TestLoad:
         assert loaded_system_settings == ss
 
     def test_bad_json(self, temp_config):
-        """Tests that loading returns None when the file contains invalid JSON."""
+        """Tests that loading errors when the file contains invalid JSON."""
         ss, config_dir, full_file_path, _ = temp_config
         config_dir.mkdir(exist_ok=True)
 
         with open(full_file_path, "w") as fs:
             fs.write(ss.model_dump_json(indent=2)[:-1])  # Write incomplete JSON
 
-        loaded_system_settings = utils.load_system_configuration(full_file_path)
-        assert loaded_system_settings is None
+        with pytest.raises(ValueError):
+            _ = utils.load_system_configuration(full_file_path)
 
     def test_invalid_schema(self, temp_config):
         """Tests that loading returns None when the JSON does not match the pydantic model schema."""
@@ -105,6 +106,5 @@ class TestLoad:
 
         with open(full_file_path, "w") as fs:
             fs.write(JSON_STRING)
-
-        loaded_system_settings = utils.load_system_configuration(full_file_path)
-        assert loaded_system_settings is None
+        with pytest.raises(ValidationError):
+            _ = utils.load_system_configuration(full_file_path)
