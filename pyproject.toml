@@ -12,14 +12,14 @@ authors = [
     { name = "Joshua Sanders", email = "josh@sanworks.io" },
     { name = "Austin Pauley", email = "pauley@psy.fsu.edu" },
     { name = "Florian Rau", email = "bimac@users.noreply.github.com" },
-    { name = "Steven Smith", email = "steven@stevenlsmith.com" }
+    { name = "Steven Smith", email = "steven@stevenlsmith.com" },
 ]
 requires-python = ">=3.10"
 dependencies = [
     "bpod-core",
     #"bpod-gui"
-	"bpod-core>=0.1.0a2",
-	"pydantic==2.11.7",
+    "bpod-core>=0.1.0a2",
+    "pydantic==2.11.7",
 ]
 
 [project.urls]
@@ -79,6 +79,7 @@ target-version = "py310"
 # Unlike Flake8, Ruff doesn't enable pycodestyle warnings (`W`) or
 # McCabe complexity (`C901`) by default.
 select = [
+    "D",
     "E",
     "F",
     "YTT",
@@ -102,18 +103,18 @@ select = [
     "UP007", # use pipes for type union instead of Union
 ]
 ignore = [
-    "COM812", # Missing trailing comma
-    "D100", # Missing docstring in public module
-    "D101", # Missing docstring in public class
-    "D102", # Missing docstring in public method
-    "D103", # Missing docstring in public function
-    "D104", # Missing docstring in public package
-    "D105", # Missing docstring in magic method
-    "D401", # First line of docstring should be in imperative mood
+    "COM812",  # Missing trailing comma
+    "D100",    # Missing docstring in public module
+    "D101",    # Missing docstring in public class
+    "D102",    # Missing docstring in public method
+    "D103",    # Missing docstring in public function
+    "D104",    # Missing docstring in public package
+    "D105",    # Missing docstring in magic method
+    "D401",    # First line of docstring should be in imperative mood
     "PLR0912", # Too many branches
     "PLR0915", # Too many statements
     "PLR2004", # Magic value used in comparison, consider replacing with a constant variable
-    "S101", # Use of assert
+    "S101",    # Use of assert
 ]
 # Allow fix for all enabled rules (when `--fix`) is provided.
 fixable = []
@@ -153,10 +154,5 @@ docstring-code-format = false
 docstring-code-line-length = "dynamic"
 
 [dependency-groups]
-dev = [
-    {include-group = "test"},
-]
-test = [
-    "pytest>=8.4.2",
-    "pytest-cov>=7.0.0",
-]
+dev = [{ include-group = "test" }]
+test = ["pytest>=8.4.2", "pytest-cov>=7.0.0"]
