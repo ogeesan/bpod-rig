@@ -23,9 +23,7 @@ def system_path_factory(data: dict, addition: str) -> Path | None:
     Function to dynamically create SystemPath subpaths at validation time.
 
     Function creates a path in the below form:
-
-    {base_dir}/[addition]
-
+        {base_dir}/[addition]
     Path components in {} are retrieved from the dictionary of pre-validated data.
 
     Parameters
