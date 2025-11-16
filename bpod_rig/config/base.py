@@ -1,4 +1,4 @@
-"""Base classes for configuration classes"""
+"""Base classes for configuration classes."""
 
 import datetime
 from typing import Annotated, Any, Optional
@@ -72,15 +72,16 @@ class ModelWithMetadata(BaseModel):
     @model_validator(mode="before")
     @classmethod
     def forward_username(cls, data: Any) -> Any:
-        """
-            For simplicity, allow the user to pass username to the SystemSettings
-            constructor for instantiating a SettingsMetadata object.
+        """Bring username into metadata.
 
-            If the user provides a value for "metadata", we will assume
-            they passed an initialized and validated SettingsMetadata object. If not,
-            the fields default validation will catch it. If not and they provide
-            "username", instantiate a SettingsMetadata object with the custom username
-            and place it in the kwargs dict.
+        For simplicity, allow the user to pass username to the SystemSettings
+        constructor for instantiating a SettingsMetadata object.
+
+        If the user provides a value for "metadata", we will assume
+        they passed an initialized and validated SettingsMetadata object. If not,
+        the fields default validation will catch it. If not and they provide
+        "username", instantiate a SettingsMetadata object with the custom username
+        and place it in the kwargs dict.
 
         Parameters
         ----------
