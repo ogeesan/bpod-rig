@@ -56,5 +56,5 @@ class TestJSONHandler:
         """Tests that read_json returns None if the file does not exist."""
         bad_file = temp_dir.joinpath("dne.json")
 
-        returned_data = json_handler.read_json(bad_file)
-        assert returned_data is None
+        with pytest.raises(FileNotFoundError):
+            _ = json_handler.read_json(bad_file)

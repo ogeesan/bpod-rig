@@ -37,7 +37,7 @@ def write_json(json_content: str, save_path: Path, file_name: str) -> Path:
     return full_save_path
 
 
-def read_json(file_path: Path) -> str | None:
+def read_json(file_path: Path) -> str:
     """Read json-formatted data from disk.
 
     Parameters
@@ -50,14 +50,4 @@ def read_json(file_path: Path) -> str | None:
     str
         Json-formatted data read from provided file path
     """
-    if not file_path.exists():
-        logger.error("File [%s] does not exist!", file_path)
-        return None
-
-    try:
-        with open(file_path, "r") as json_stream:
-            logger.debug("Reading JSON from %s", str(file_path))
-            return json_stream.read()
-    except (IOError, OSError) as e:
-        logger.error("Error opening and reading file!", exc_info=e)
-        return None
+    return file_path.read_text()
