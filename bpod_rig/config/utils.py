@@ -16,7 +16,6 @@ def init_system_configuration(bpod_dir: Path) -> SystemSettings:
     )
 
     system_settings = SystemSettings(paths=system_paths)
-    print(system_settings.model_dump_json(indent=2))
     return system_settings
 
 
